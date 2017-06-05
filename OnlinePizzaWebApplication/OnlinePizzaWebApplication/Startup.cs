@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using OnlinePizzaWebApplication.Models;
+using Microsoft.EntityFrameworkCore;
+using OnlinePizzaWebApplication.Data;
+using OnlinePizzaWebApplication.Repository;
 
 namespace OnlinePizzaWebApplication
 {
@@ -27,12 +31,15 @@ namespace OnlinePizzaWebApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddTransient<IPizzaRepository, PizzaRepository>();
+
             services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, AppDbContext context)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -55,6 +62,8 @@ namespace OnlinePizzaWebApplication
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            DbInitializer.Initialize(context);
         }
     }
 }
