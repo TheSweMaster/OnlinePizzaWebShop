@@ -1,4 +1,4 @@
-@model Pizzas
+@model OnlinePizzaWebApplication.Models.Pizzas
 
 @{
     ViewData["Title"] = "Edit";
@@ -8,7 +8,7 @@
 
 <form asp-action="Edit">
     <div class="form-horizontal">
-        <h4>Pizza</h4>
+        <h4>Pizzas</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Id" />
@@ -34,10 +34,10 @@
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="Image" class="col-md-2 control-label"></label>
+            <label asp-for="ImageUrl" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Image" class="form-control" />
-                <span asp-validation-for="Image" class="text-danger"></span>
+                <input asp-for="ImageUrl" class="form-control" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
@@ -46,6 +46,13 @@
                     <input asp-for="IsPizzaOfTheWeek" />
                     <label asp-for="IsPizzaOfTheWeek"></label>
                 </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="CategoriesId" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <select asp-for="CategoriesId" class="form-control" asp-items="ViewBag.CategoriesId"></select>
+                <span asp-validation-for="CategoriesId" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">

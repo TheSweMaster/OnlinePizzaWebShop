@@ -1,4 +1,4 @@
-@model OnlinePizzaWebApplication.Models.Pizzas
+@model OnlinePizzaWebApplication.Models.Reviews
 
 @{
     ViewData["Title"] = "Create";
@@ -8,21 +8,14 @@
 
 <form asp-action="Create">
     <div class="form-horizontal">
-        <h4>Pizzas</h4>
+        <h4>Reviews</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
-            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <label asp-for="Title" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Price" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
@@ -33,24 +26,23 @@
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="ImageUrl" class="col-md-2 control-label"></label>
+            <label asp-for="Grade" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="ImageUrl" class="form-control" />
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                <input asp-for="Grade" class="form-control" />
+                <span asp-validation-for="Grade" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <div class="checkbox">
-                    <input asp-for="IsPizzaOfTheWeek" />
-                    <label asp-for="IsPizzaOfTheWeek"></label>
-                </div>
+            <label asp-for="Date" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="CategoriesId" class="col-md-2 control-label"></label>
+            <label asp-for="PizzaId" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="CategoriesId" class ="form-control" asp-items="ViewBag.CategoriesId"></select>
+                <select asp-for="PizzaId" class ="form-control" asp-items="ViewBag.PizzaId"></select>
             </div>
         </div>
         <div class="form-group">

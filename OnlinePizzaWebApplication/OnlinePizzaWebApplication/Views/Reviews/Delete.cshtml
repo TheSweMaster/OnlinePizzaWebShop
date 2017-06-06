@@ -1,4 +1,4 @@
-@model OnlinePizzaWebApplication.Models.Pizzas
+@model OnlinePizzaWebApplication.Models.Reviews
 
 @{
     ViewData["Title"] = "Delete";
@@ -8,21 +8,15 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Pizzas</h4>
+    <h4>Reviews</h4>
     <hr />
     <dl class="dl-horizontal">
         <input type="hidden" asp-for="Id" />
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Title)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Price)
+            @Html.DisplayFor(model => model.Title)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Description)
@@ -31,22 +25,22 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.ImageUrl)
+            @Html.DisplayNameFor(model => model.Grade)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ImageUrl)
+            @Html.DisplayFor(model => model.Grade)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.IsPizzaOfTheWeek)
+            @Html.DisplayNameFor(model => model.Date)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.IsPizzaOfTheWeek)
+            @Html.DisplayFor(model => model.Date)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Category)
+            @Html.DisplayNameFor(model => model.Pizza)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Category.Name)
+            @Html.DisplayFor(model => model.Pizza.Description)
         </dd>
     </dl>
     

@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using OnlinePizzaWebApplication.Models;
 using Microsoft.EntityFrameworkCore;
 using OnlinePizzaWebApplication.Data;
-using OnlinePizzaWebApplication.Repository;
+using OnlinePizzaWebApplication.Repositories;
 
 namespace OnlinePizzaWebApplication
 {
@@ -34,6 +34,7 @@ namespace OnlinePizzaWebApplication
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddTransient<IPizzaRepository, PizzaRepository>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
 
             services.AddMvc();
         }

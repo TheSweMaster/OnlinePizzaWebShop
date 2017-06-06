@@ -6,23 +6,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlinePizzaWebApplication.Models;
+using OnlinePizzaWebApplication.Repositories;
 
 namespace OnlinePizzaWebApplication.Controllers
 {
-    public class PizzasController : Controller
+    public class PizzasOldController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IPizzaRepository _pizzaRepo;
 
-        public PizzasController(AppDbContext context)
+        public PizzasOldController(AppDbContext context, IPizzaRepository pizzaRepo)
         {
-            _context = context;    
+            _context = context;
+            _pizzaRepo = pizzaRepo;
         }
 
         // GET: Pizzas
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Pizzas.Include(p => p.Category);
-            return View(await appDbContext.ToListAsync());
+            return View(await _pizzaRepo.GetAllAsync());
         }
 
         // GET: Pizzas/Details/5
@@ -33,21 +35,19 @@ namespace OnlinePizzaWebApplication.Controllers
                 return NotFound();
             }
 
-            var pizzas = await _context.Pizzas
-                .Include(p => p.Category)
-                .SingleOrDefaultAsync(m => m.Id == id);
-            if (pizzas == null)
+            var pizza = await _pizzaRepo.GetByIdAsync(id);
+
+            if (pizza == null)
             {
                 return NotFound();
             }
 
-            return View(pizzas);
+            return View(pizza);
         }
 
         // GET: Pizzas/Create
         public IActionResult Create()
         {
-            ViewData["CategoriesId"] = new SelectList(_context.Categories, "Id", "Name");
             return View();
         }
 
@@ -56,16 +56,15 @@ namespace OnlinePizzaWebApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,Description,ImageUrl,IsPizzaOfTheWeek,CategoriesId")] Pizzas pizzas)
+        public async Task<IActionResult> Create([Bind("Id,Name,Price,Description,ImageUrl,IsPizzaOfTheWeek")] Pizzas pizza)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(pizzas);
-                await _context.SaveChangesAsync();
+                _pizzaRepo.Add(pizza);
+                await _pizzaRepo.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewData["CategoriesId"] = new SelectList(_context.Categories, "Id", "Name", pizzas.CategoriesId);
-            return View(pizzas);
+            return View(pizza);
         }
 
         // GET: Pizzas/Edit/5
@@ -76,13 +75,12 @@ namespace OnlinePizzaWebApplication.Controllers
                 return NotFound();
             }
 
-            var pizzas = await _context.Pizzas.SingleOrDefaultAsync(m => m.Id == id);
-            if (pizzas == null)
+            var pizza = await _pizzaRepo.GetByIdAsync(id);
+            if (pizza == null)
             {
                 return NotFound();
             }
-            ViewData["CategoriesId"] = new SelectList(_context.Categories, "Id", "Name", pizzas.CategoriesId);
-            return View(pizzas);
+            return View(pizza);
         }
 
         // POST: Pizzas/Edit/5
@@ -90,9 +88,9 @@ namespace OnlinePizzaWebApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Description,ImageUrl,IsPizzaOfTheWeek,CategoriesId")] Pizzas pizzas)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Description,ImageUrl,IsPizzaOfTheWeek")] Pizzas pizza)
         {
-            if (id != pizzas.Id)
+            if (id != pizza.Id)
             {
                 return NotFound();
             }
@@ -101,12 +99,12 @@ namespace OnlinePizzaWebApplication.Controllers
             {
                 try
                 {
-                    _context.Update(pizzas);
-                    await _context.SaveChangesAsync();
+                    _pizzaRepo.Update(pizza);
+                    await _pizzaRepo.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PizzasExists(pizzas.Id))
+                    if (!PizzaExists(pizza.Id))
                     {
                         return NotFound();
                     }
@@ -117,8 +115,7 @@ namespace OnlinePizzaWebApplication.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["CategoriesId"] = new SelectList(_context.Categories, "Id", "Name", pizzas.CategoriesId);
-            return View(pizzas);
+            return View(pizza);
         }
 
         // GET: Pizzas/Delete/5
@@ -129,15 +126,14 @@ namespace OnlinePizzaWebApplication.Controllers
                 return NotFound();
             }
 
-            var pizzas = await _context.Pizzas
-                .Include(p => p.Category)
-                .SingleOrDefaultAsync(m => m.Id == id);
-            if (pizzas == null)
+            var pizza = await _pizzaRepo.GetByIdAsync(id);
+
+            if (pizza == null)
             {
                 return NotFound();
             }
 
-            return View(pizzas);
+            return View(pizza);
         }
 
         // POST: Pizzas/Delete/5
@@ -145,15 +141,15 @@ namespace OnlinePizzaWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var pizzas = await _context.Pizzas.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Pizzas.Remove(pizzas);
-            await _context.SaveChangesAsync();
+            var pizza = await _pizzaRepo.GetByIdAsync(id);
+            _pizzaRepo.Remove(pizza);
+            await _pizzaRepo.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool PizzasExists(int id)
+        private bool PizzaExists(int id)
         {
-            return _context.Pizzas.Any(e => e.Id == id);
+            return _pizzaRepo.Exists(id);
         }
     }
 }

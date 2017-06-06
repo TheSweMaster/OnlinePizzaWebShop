@@ -4,19 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace OnlinePizzaWebApplication.Repository
+namespace OnlinePizzaWebApplication.Repositories
+
 {
     public interface IPizzaRepository
     {
         IEnumerable<Pizzas> Pizzas { get; }
         IEnumerable<Pizzas> PizzasOfTheWeek { get; }
 
-        Pizzas GetPizzaById(int? id);
-        Task<Pizzas> GetPizzaByIdAsync(int? id);
+        Pizzas GetById(int? id);
+        Task<Pizzas> GetByIdAsync(int? id);
 
-        bool PizzaExists(int id);
-
-        IEnumerable<Pizzas> GetPizzasByName(string name);
+        bool Exists(int id);
 
         IEnumerable<Pizzas> GetAll();
         Task<IEnumerable<Pizzas>> GetAllAsync();
@@ -25,10 +24,11 @@ namespace OnlinePizzaWebApplication.Repository
         void Update(Pizzas pizza);
         void Remove(Pizzas pizza);
 
+        void SaveChanges();
         Task SaveChangesAsync();
 
         void ClearDatabase();
-        void SeedDatabase();
+        //void SeedDatabase();
 
     }
 }

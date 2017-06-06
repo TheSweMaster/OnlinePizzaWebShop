@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace OnlinePizzaWebApplication.Repository
+namespace OnlinePizzaWebApplication.Repositories
 {
     public class PizzaRepository : IPizzaRepository
     {
@@ -35,22 +35,17 @@ namespace OnlinePizzaWebApplication.Repository
             return await _context.Pizzas.ToListAsync();
         }
 
-        public Pizzas GetPizzaById(int? id)
+        public Pizzas GetById(int? id)
         {
             return _context.Pizzas.FirstOrDefault(p => p.Id == id);
         }
 
-        public async Task<Pizzas> GetPizzaByIdAsync(int? id)
+        public async Task<Pizzas> GetByIdAsync(int? id)
         {
             return await _context.Pizzas.FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public IEnumerable<Pizzas> GetPizzasByName(string name)
-        {
-            return _context.Pizzas.Where(p => p.Name == name);
-        }
-
-        public bool PizzaExists(int id)
+        public bool Exists(int id)
         {
             return _context.Pizzas.Any(p => p.Id == id);
         }
@@ -65,14 +60,14 @@ namespace OnlinePizzaWebApplication.Repository
             await _context.SaveChangesAsync();
         }
 
+        public void SaveChanges()
+        {
+            _context.SaveChanges();
+        }
+
         public void Update(Pizzas pizza)
         {
             _context.Update(pizza);
-        }
-
-        public void SeedDatabase()
-        {
-            throw new NotImplementedException();
         }
 
         public void ClearDatabase()

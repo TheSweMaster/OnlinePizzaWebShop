@@ -9,23 +9,22 @@ using OnlinePizzaWebApplication.Models;
 
 namespace OnlinePizzaWebApplication.Controllers
 {
-    public class PizzasController : Controller
+    public class CategoriesController : Controller
     {
         private readonly AppDbContext _context;
 
-        public PizzasController(AppDbContext context)
+        public CategoriesController(AppDbContext context)
         {
             _context = context;    
         }
 
-        // GET: Pizzas
+        // GET: Categories
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Pizzas.Include(p => p.Category);
-            return View(await appDbContext.ToListAsync());
+            return View(await _context.Categories.ToListAsync());
         }
 
-        // GET: Pizzas/Details/5
+        // GET: Categories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,42 +32,39 @@ namespace OnlinePizzaWebApplication.Controllers
                 return NotFound();
             }
 
-            var pizzas = await _context.Pizzas
-                .Include(p => p.Category)
+            var categories = await _context.Categories
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (pizzas == null)
+            if (categories == null)
             {
                 return NotFound();
             }
 
-            return View(pizzas);
+            return View(categories);
         }
 
-        // GET: Pizzas/Create
+        // GET: Categories/Create
         public IActionResult Create()
         {
-            ViewData["CategoriesId"] = new SelectList(_context.Categories, "Id", "Name");
             return View();
         }
 
-        // POST: Pizzas/Create
+        // POST: Categories/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,Description,ImageUrl,IsPizzaOfTheWeek,CategoriesId")] Pizzas pizzas)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description")] Categories categories)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(pizzas);
+                _context.Add(categories);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewData["CategoriesId"] = new SelectList(_context.Categories, "Id", "Name", pizzas.CategoriesId);
-            return View(pizzas);
+            return View(categories);
         }
 
-        // GET: Pizzas/Edit/5
+        // GET: Categories/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,23 +72,22 @@ namespace OnlinePizzaWebApplication.Controllers
                 return NotFound();
             }
 
-            var pizzas = await _context.Pizzas.SingleOrDefaultAsync(m => m.Id == id);
-            if (pizzas == null)
+            var categories = await _context.Categories.SingleOrDefaultAsync(m => m.Id == id);
+            if (categories == null)
             {
                 return NotFound();
             }
-            ViewData["CategoriesId"] = new SelectList(_context.Categories, "Id", "Name", pizzas.CategoriesId);
-            return View(pizzas);
+            return View(categories);
         }
 
-        // POST: Pizzas/Edit/5
+        // POST: Categories/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Description,ImageUrl,IsPizzaOfTheWeek,CategoriesId")] Pizzas pizzas)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description")] Categories categories)
         {
-            if (id != pizzas.Id)
+            if (id != categories.Id)
             {
                 return NotFound();
             }
@@ -101,12 +96,12 @@ namespace OnlinePizzaWebApplication.Controllers
             {
                 try
                 {
-                    _context.Update(pizzas);
+                    _context.Update(categories);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PizzasExists(pizzas.Id))
+                    if (!CategoriesExists(categories.Id))
                     {
                         return NotFound();
                     }
@@ -117,11 +112,10 @@ namespace OnlinePizzaWebApplication.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["CategoriesId"] = new SelectList(_context.Categories, "Id", "Name", pizzas.CategoriesId);
-            return View(pizzas);
+            return View(categories);
         }
 
-        // GET: Pizzas/Delete/5
+        // GET: Categories/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -129,31 +123,30 @@ namespace OnlinePizzaWebApplication.Controllers
                 return NotFound();
             }
 
-            var pizzas = await _context.Pizzas
-                .Include(p => p.Category)
+            var categories = await _context.Categories
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (pizzas == null)
+            if (categories == null)
             {
                 return NotFound();
             }
 
-            return View(pizzas);
+            return View(categories);
         }
 
-        // POST: Pizzas/Delete/5
+        // POST: Categories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var pizzas = await _context.Pizzas.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Pizzas.Remove(pizzas);
+            var categories = await _context.Categories.SingleOrDefaultAsync(m => m.Id == id);
+            _context.Categories.Remove(categories);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool PizzasExists(int id)
+        private bool CategoriesExists(int id)
         {
-            return _context.Pizzas.Any(e => e.Id == id);
+            return _context.Categories.Any(e => e.Id == id);
         }
     }
 }

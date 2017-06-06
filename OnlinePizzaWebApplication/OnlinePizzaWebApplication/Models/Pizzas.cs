@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,7 +38,9 @@ namespace OnlinePizzaWebApplication.Models
 
         public bool IsPizzaOfTheWeek { get; set; }
 
+        [DisplayName("Select Category")]
         public int CategoriesId { get; set; }
+
         public virtual Categories Category { get; set; }
 
         public virtual ICollection<PizzaIngredients> PizzaIngredients { get; set; }

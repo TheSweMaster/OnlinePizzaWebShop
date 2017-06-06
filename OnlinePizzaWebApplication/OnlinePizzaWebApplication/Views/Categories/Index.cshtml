@@ -1,4 +1,4 @@
-@model IEnumerable<OnlinePizzaWebApplication.Models.Pizzas>
+@model IEnumerable<OnlinePizzaWebApplication.Models.Categories>
 
 @{
     ViewData["Title"] = "Index";
@@ -16,20 +16,8 @@
                     @Html.DisplayNameFor(model => model.Name)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Price)
-                </th>
-                <th>
                     @Html.DisplayNameFor(model => model.Description)
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ImageUrl)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.IsPizzaOfTheWeek)
-                </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -40,19 +28,7 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageUrl)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsPizzaOfTheWeek)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
