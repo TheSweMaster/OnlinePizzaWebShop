@@ -8,9 +8,10 @@ using OnlinePizzaWebApplication.Models;
 namespace OnlinePizzaWebApplication.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170606114731_Added_PizzaIngredients_Categories_Reviews2")]
+    partial class Added_PizzaIngredients_Categories_Reviews2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")

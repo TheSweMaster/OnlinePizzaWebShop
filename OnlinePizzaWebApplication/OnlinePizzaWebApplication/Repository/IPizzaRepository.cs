@@ -8,22 +8,22 @@ namespace OnlinePizzaWebApplication.Repository
 {
     public interface IPizzaRepository
     {
-        IEnumerable<Pizza> Pizzas { get; }
-        IEnumerable<Pizza> PizzasOfTheWeek { get; }
+        IEnumerable<Pizzas> Pizzas { get; }
+        IEnumerable<Pizzas> PizzasOfTheWeek { get; }
 
-        Pizza GetPizzaById(int? id);
-        Task<Pizza> GetPizzaByIdAsync(int? id);
+        Pizzas GetPizzaById(int? id);
+        Task<Pizzas> GetPizzaByIdAsync(int? id);
 
         bool PizzaExists(int id);
 
-        IEnumerable<Pizza> GetPizzasByName(string name);
+        IEnumerable<Pizzas> GetPizzasByName(string name);
 
-        IEnumerable<Pizza> GetAll();
-        Task<IEnumerable<Pizza>> GetAllAsync();
+        IEnumerable<Pizzas> GetAll();
+        Task<IEnumerable<Pizzas>> GetAllAsync();
 
-        void Add(Pizza pizza);
-        void Update(Pizza pizza);
-        void Remove(Pizza pizza);
+        void Add(Pizzas pizza);
+        void Update(Pizzas pizza);
+        void Remove(Pizzas pizza);
 
         Task SaveChangesAsync();
 

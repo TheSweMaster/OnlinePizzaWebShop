@@ -8,9 +8,10 @@ using OnlinePizzaWebApplication.Models;
 namespace OnlinePizzaWebApplication.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170606114118_Added_PizzaIngredients_Categories_Reviews")]
+    partial class Added_PizzaIngredients_Categories_Reviews
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -70,7 +71,7 @@ namespace OnlinePizzaWebApplication.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CategoriesId");
+                    b.Property<int>("CategoryId");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -88,7 +89,7 @@ namespace OnlinePizzaWebApplication.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoriesId");
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Pizzas");
                 });
@@ -136,7 +137,7 @@ namespace OnlinePizzaWebApplication.Migrations
                 {
                     b.HasOne("OnlinePizzaWebApplication.Models.Categories", "Category")
                         .WithMany("Pizzas")
-                        .HasForeignKey("CategoriesId")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
