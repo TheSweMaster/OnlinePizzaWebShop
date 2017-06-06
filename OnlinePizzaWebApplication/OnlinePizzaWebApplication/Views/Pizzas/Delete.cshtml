@@ -1,4 +1,4 @@
-@model Pizza
+@model Pizzas
 
 @{
     ViewData["Title"] = "Delete";
@@ -31,10 +31,10 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Image)
+            @Html.DisplayNameFor(model => model.ImageUrl)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Image)
+            @Html.DisplayFor(model => model.ImageUrl)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.IsPizzaOfTheWeek)

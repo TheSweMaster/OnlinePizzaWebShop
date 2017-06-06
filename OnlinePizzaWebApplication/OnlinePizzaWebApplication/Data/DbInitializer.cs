@@ -17,81 +17,93 @@ namespace OnlinePizzaWebApplication.Data
                 return;
             }
 
-            var pizzas = new Pizzas[]
+            var cat1 = new Categories { Name = "Standard", Description = "The Bakery's Standard pizzas all year around." };
+            var cat2 = new Categories { Name = "Spcialities", Description="The Bakery's Speciality pizzas only for a limited time." };
+            var cat3 = new Categories { Name = "News", Description = "The Bakery's New pizzas on the menu." };
+
+            var cats = new List<Categories>()
             {
-            new Pizzas{Name="Hawaii",  Price=75.00M, Description="A nice tasting pizza from Hawaii.", ImageUrl="Hawaii.Pizza.Picture", IsPizzaOfTheWeek=true},
-            new Pizzas{Name="Capricciosa",  Price=70.00M, Description="A normal pizza with a taste from the forest.", ImageUrl="Caprichosa.Pizza.Picture", IsPizzaOfTheWeek=false},
-            new Pizzas{Name="Margarita",  Price=65.00M, Description="A basic pizza for everyone.", ImageUrl="Margeretha.Pizza.Picture", IsPizzaOfTheWeek=false},
+                cat1, cat2, cat3
             };
-            foreach (var pizza in pizzas)
+
+            var piz1 = new Pizzas { Name = "Capricciosa", Price = 70.00M, Category = cat1, Description = "A normal pizza with a taste from the forest.", ImageUrl = "Capricciosa.Pizza.Picture", IsPizzaOfTheWeek = false };
+            var piz2 = new Pizzas { Name = "Veggie", Price = 70.00M, Category = cat3, Description = "Veggie Pizza for vegitarians", ImageUrl = "Veggie.Pizza.Picture", IsPizzaOfTheWeek = false };
+            var piz3 = new Pizzas { Name = "Hawaii", Price = 75.00M, Category = cat1, Description = "A nice tasting pizza from Hawaii.", ImageUrl = "Hawaii.Pizza.Picture", IsPizzaOfTheWeek = true };
+            var piz4 = new Pizzas { Name = "Margarita", Price = 65.00M, Category = cat1, Description = "A basic pizza for everyone.", ImageUrl = "Margeretha.Pizza.Picture", IsPizzaOfTheWeek = false };
+            var piz5 = new Pizzas { Name = "Kebab Special", Price = 85.00M, Category = cat2, Description = "A special pizza with kebab for the hungry one.", ImageUrl = "Kebab_Special.Pizza.Picture", IsPizzaOfTheWeek = true };
+
+            var pizs = new List<Pizzas>()
             {
-                context.Pizzas.Add(pizza);
-            }
+                piz1, piz2, piz3, piz4, piz5
+            };
+
+            var revs = new List<Reviews>()
+            {
+                new Reviews { Title ="Best Pizza with mushrooms", Description="I love this Pizza with mushrooms on it.", Grade=4, Date=DateTime.Now, Pizza = piz1 },
+                new Reviews { Title ="Worst Pizza with mushrooms", Description="I hate this Pizza with mushrooms on it.", Grade=1, Date=DateTime.Now.AddDays(-1), Pizza = piz1 },
+                new Reviews { Title ="Only Bland Vegetables", Description="Tasteless vegetables on this soggy Pizza.", Grade=0, Date=DateTime.Now, Pizza = piz2 },
+                new Reviews { Title ="Great Veggie Pizza", Description="Good choice if you are a vegitarian.", Grade=5, Date=DateTime.Now.AddDays(-6), Pizza = piz2 },
+                new Reviews { Title ="Amazing pineapples", Description="I love the taste of the pineapples on this pizza.", Grade=4, Date=DateTime.Now.AddDays(-4), Pizza = piz3 },
+                new Reviews { Title ="Too simple", Description="Too simple pizza, for such a high price.", Grade=2, Date=DateTime.Now.AddDays(-2), Pizza = piz4 },
+                new Reviews { Title ="Super Special", Description="Super special pizza, the best taste in the world!", Grade=5, Date=DateTime.Now.AddDays(-9), Pizza = piz5 },
+            };
+
+            var ing1 = new Ingredients { Name = "Cheese" };
+            var ing2 = new Ingredients { Name = "Flour" };
+            var ing3 = new Ingredients { Name = "Tomatoe sauce" };
+            var ing4 = new Ingredients { Name = "Lettuce" };
+            var ing5 = new Ingredients { Name = "Mushrooms" };
+            var ing6 = new Ingredients { Name = "Kebab" };
+            var ing7 = new Ingredients { Name = "Shrimp" };
+            var ing8 = new Ingredients { Name = "Pineapple" };
+            var ing9 = new Ingredients { Name = "Ham" };
+            var ing10 = new Ingredients { Name = "Broccoli" };
+            var ing11 = new Ingredients { Name = "Onions" };
+
+            var ings = new List<Ingredients>()
+            {
+                ing1, ing2, ing3, ing4, ing5, ing6, ing7, ing8, ing9, ing10, ing11
+            };
+
+            var pizIngs = new List<PizzaIngredients>()
+            {
+                new PizzaIngredients { Ingredient = ing1, Pizza = piz1 },
+                new PizzaIngredients { Ingredient = ing2, Pizza = piz1 },
+                new PizzaIngredients { Ingredient = ing3, Pizza = piz1 },
+                new PizzaIngredients { Ingredient = ing5, Pizza = piz1 },
+                new PizzaIngredients { Ingredient = ing9, Pizza = piz1 },
+
+                new PizzaIngredients { Ingredient = ing1, Pizza = piz2 },
+                new PizzaIngredients { Ingredient = ing2, Pizza = piz2 },
+                new PizzaIngredients { Ingredient = ing3, Pizza = piz2 },
+                new PizzaIngredients { Ingredient = ing4, Pizza = piz2 },
+                new PizzaIngredients { Ingredient = ing10, Pizza = piz2 },
+
+                new PizzaIngredients { Ingredient = ing1, Pizza = piz3 },
+                new PizzaIngredients { Ingredient = ing2, Pizza = piz3 },
+                new PizzaIngredients { Ingredient = ing3, Pizza = piz3 },
+                new PizzaIngredients { Ingredient = ing8, Pizza = piz3 },
+                new PizzaIngredients { Ingredient = ing9, Pizza = piz3 },
+
+                new PizzaIngredients { Ingredient = ing1, Pizza = piz4 },
+                new PizzaIngredients { Ingredient = ing2, Pizza = piz4 },
+                new PizzaIngredients { Ingredient = ing3, Pizza = piz4 },
+
+                new PizzaIngredients { Ingredient = ing1, Pizza = piz5 },
+                new PizzaIngredients { Ingredient = ing2, Pizza = piz5 },
+                new PizzaIngredients { Ingredient = ing3, Pizza = piz5 },
+                new PizzaIngredients { Ingredient = ing6, Pizza = piz5 },
+                new PizzaIngredients { Ingredient = ing4, Pizza = piz5 },
+                new PizzaIngredients { Ingredient = ing11, Pizza = piz5 },
+
+            };
+
+            context.Categories.AddRange(cats);
+            context.Pizzas.AddRange(pizs);
+            context.Reviews.AddRange(revs);
+            context.Ingredients.AddRange(ings);
+            context.PizzaIngredients.AddRange(pizIngs);
             context.SaveChanges();
-
         }
-
-        //private void CreateDataV2()
-        //{
-        //    var piz1 = new Pizzas { Name = "Caprichosa", Description = "Pizza from Italy with great taste.", Prize = 70 };
-        //    var piz2 = new Pizzas { Name = "Veggie", Description = "Veggie Pizza for vegitarians", Prize = 65 };
-
-        //    var pizs = new List<Pizzas>()
-        //    {
-        //        piz1, piz2,
-        //    };
-
-        //    var revs = new List<Reviews>()
-        //    {
-        //        new Reviews { Title ="Best Pizza with mushrooms", Description="I love this Pizza with mushrooms on it.", Grade=4, Date=DateTime.Now, Pizza = piz1 },
-        //        new Reviews { Title ="Worst Pizza with mushrooms", Description="I hate this Pizza with mushrooms on it.", Grade=1, Date=DateTime.Now.AddDays(-1), Pizza = piz1 },
-        //        new Reviews { Title ="Only Bland Vegetables", Description="Tasteless vegetables on this soggy Pizza.", Grade=0, Date=DateTime.Now, Pizza = piz2 },
-        //        new Reviews { Title ="Great Veggie Pizza", Description="Good choice if you are a vegitarian.", Grade=5, Date=DateTime.Now.AddDays(-6), Pizza = piz2 },
-        //    };
-
-        //    var orgs = new List<Orgins>()
-        //    {
-        //        new Orgins { City = "Rome", Country = "Italy", Date = DateTime.Now.Date.AddYears(-186), Pizza = piz1 },
-        //        new Orgins { City = "Gothenburg", Country = "Sweden", Date = DateTime.Now.Date.AddYears(-6), Pizza = piz2 },
-        //    };
-
-        //    var ing1 = new Ingredients { Name = "Cheese", Gluten = 0, Type = Types.Other };
-        //    var ing2 = new Ingredients { Name = "Flour", Gluten = 1, Type = Types.Other };
-        //    var ing3 = new Ingredients { Name = "Tomatoe", Gluten = 0, Type = Types.Vegetable };
-        //    var ing4 = new Ingredients { Name = "Lettuce", Gluten = 0, Type = Types.Vegetable };
-        //    var ing5 = new Ingredients { Name = "Mushroom", Gluten = 0, Type = Types.Meat };
-        //    var ing6 = new Ingredients { Name = "Kebab", Gluten = 1, Type = Types.Meat };
-        //    var ing7 = new Ingredients { Name = "Shrimp", Gluten = 0, Type = Types.Meat };
-        //    var ing8 = new Ingredients { Name = "Pineapple", Gluten = 0, Type = Types.Fruit };
-        //    var ing9 = new Ingredients { Name = "Ham", Gluten = 0, Type = Types.Meat };
-        //    var ing10 = new Ingredients { Name = "Broccoli", Gluten = 0, Type = Types.Vegetable };
-
-        //    var ings = new List<Ingredients>()
-        //    {
-        //        ing1, ing2, ing3, ing4, ing5, ing6, ing7, ing8, ing9, ing10,
-        //    };
-
-        //    var pizIngs = new List<PizzaIngredients>()
-        //    {
-        //        new PizzaIngredients { Ingredient = ing1, Pizza = piz1 },
-        //        new PizzaIngredients { Ingredient = ing2, Pizza = piz1 },
-        //        new PizzaIngredients { Ingredient = ing3, Pizza = piz1 },
-        //        new PizzaIngredients { Ingredient = ing5, Pizza = piz1 },
-        //        new PizzaIngredients { Ingredient = ing9, Pizza = piz1 },
-        //        new PizzaIngredients { Ingredient = ing1, Pizza = piz2 },
-        //        new PizzaIngredients { Ingredient = ing2, Pizza = piz2 },
-        //        new PizzaIngredients { Ingredient = ing3, Pizza = piz2 },
-        //        new PizzaIngredients { Ingredient = ing4, Pizza = piz2 },
-        //        new PizzaIngredients { Ingredient = ing10, Pizza = piz2 },
-        //    };
-
-        //    _context.Pizzas.AddRange(pizs);
-        //    _context.Reviews.AddRange(revs);
-        //    _context.Orgins.AddRange(orgs);
-        //    _context.Ingredients.AddRange(ings);
-        //    _context.PizzaIngredients.AddRange(pizIngs);
-        //    _context.SaveChanges();
-        //}
-
     }
 }

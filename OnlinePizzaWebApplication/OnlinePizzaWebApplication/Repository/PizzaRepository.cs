@@ -25,12 +25,6 @@ namespace OnlinePizzaWebApplication.Repository
             _context.Add(pizza);
         }
 
-        public void ClearDatabase()
-        {
-            var pizzas = _context.Pizzas.ToList();
-            _context.RemoveRange(pizzas);
-        }
-
         public IEnumerable<Pizzas> GetAll()
         {
             return _context.Pizzas.ToList();
@@ -71,14 +65,36 @@ namespace OnlinePizzaWebApplication.Repository
             await _context.SaveChangesAsync();
         }
 
+        public void Update(Pizzas pizza)
+        {
+            _context.Update(pizza);
+        }
+
         public void SeedDatabase()
         {
             throw new NotImplementedException();
         }
 
-        public void Update(Pizzas pizza)
+        public void ClearDatabase()
         {
-            _context.Update(pizza);
+
+            var pizzaIngredients = _context.PizzaIngredients.ToList();
+            _context.PizzaIngredients.RemoveRange(pizzaIngredients);
+
+            var ingredients = _context.Ingredients.ToList();
+            _context.Ingredients.RemoveRange(ingredients);
+
+            var reviews = _context.Reviews.ToList();
+            _context.Reviews.RemoveRange(reviews);
+
+            var pizzas = _context.Pizzas.ToList();
+            _context.Pizzas.RemoveRange(pizzas);
+
+            var categories = _context.Categories.ToList();
+            _context.Categories.RemoveRange(categories);
+
+            _context.SaveChanges();
         }
+
     }
 }

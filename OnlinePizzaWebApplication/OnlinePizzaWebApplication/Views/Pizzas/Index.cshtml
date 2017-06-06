@@ -1,4 +1,4 @@
-@model IEnumerable<Pizza>
+@model IEnumerable<Pizzas>
 
 @{
     ViewData["Title"] = "Index";
@@ -22,7 +22,7 @@
                     @Html.DisplayNameFor(model => model.Description)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Image)
+                    @Html.DisplayNameFor(model => model.ImageUrl)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.IsPizzaOfTheWeek)
@@ -43,7 +43,7 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Image)
+                @Html.DisplayFor(modelItem => item.ImageUrl)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsPizzaOfTheWeek)
