@@ -6,26 +6,57 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlinePizzaWebApplication.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace OnlinePizzaWebApplication.Controllers
 {
+    [Authorize]
     public class ReviewsController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ReviewsController(AppDbContext context)
+        public ReviewsController(AppDbContext context, UserManager<IdentityUser> userManager)
         {
-            _context = context;    
+            _context = context;
+            _userManager = userManager;
+        }
+
+        //public IActionResult MyAction()
+        //{
+        //    var userId = _userManager.GetUserId(HttpContext.User);
+
+        //    var model = GetSomeModelByUserId(userId);
+
+        //    return View(model);
+        //}
+
+        // GET: Reviews
+        [Authorize]
+        public async Task<IActionResult> Index()
+        {
+            //var userIdTest = "eaff05c2-49b1-4bdc-bd24-8f7a34571428";
+            //var userId = _userManager.GetUserId(HttpContext.User);
+
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+
+            var reviews = _context.Reviews.Include(r => r.Pizza).ToList().Where(r => r.User == user);
+
+            return View(reviews);
         }
 
         // GET: Reviews
-        public async Task<IActionResult> Index()
+        [AllowAnonymous]
+        public async Task<IActionResult> ListAll()
         {
-            var appDbContext = _context.Reviews.Include(r => r.Pizza);
-            return View(await appDbContext.ToListAsync());
+            var reviews = await _context.Reviews.Include(r => r.Pizza).Include(r => r.User).ToListAsync();
+            return View(reviews);
         }
 
         // GET: Reviews/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -60,6 +91,9 @@ namespace OnlinePizzaWebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
+                var userId = _userManager.GetUserId(HttpContext.User);
+                reviews.UserId = userId;
+
                 _context.Add(reviews);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -77,10 +111,18 @@ namespace OnlinePizzaWebApplication.Controllers
             }
 
             var reviews = await _context.Reviews.SingleOrDefaultAsync(m => m.Id == id);
+            var userId = _userManager.GetUserId(HttpContext.User);
+
             if (reviews == null)
             {
                 return NotFound();
             }
+
+            if (reviews.UserId != userId)
+            {
+                return BadRequest("You do not have permissions to edit this review.");
+            }
+
             ViewData["PizzaId"] = new SelectList(_context.Pizzas, "Id", "Name", reviews.PizzaId);
             return View(reviews);
         }
@@ -101,14 +143,20 @@ namespace OnlinePizzaWebApplication.Controllers
             {
                 try
                 {
+
                     _context.Update(reviews);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
+                    var userId = _userManager.GetUserId(HttpContext.User);
                     if (!ReviewsExists(reviews.Id))
                     {
                         return NotFound();
+                    }
+                    else if (reviews.UserId != userId)
+                    {
+                        return BadRequest("You do not have permissions to edit this review.");
                     }
                     else
                     {
@@ -132,9 +180,16 @@ namespace OnlinePizzaWebApplication.Controllers
             var reviews = await _context.Reviews
                 .Include(r => r.Pizza)
                 .SingleOrDefaultAsync(m => m.Id == id);
+            var userId = _userManager.GetUserId(HttpContext.User);
+
             if (reviews == null)
             {
                 return NotFound();
+            }
+
+            if (reviews.UserId != userId)
+            {
+                return BadRequest("You do not have permissions to edit this review.");
             }
 
             return View(reviews);

@@ -1,15 +1,12 @@
 @model IEnumerable<Reviews>
 
 @{
-    var ModelName = "Reviews";
+    var ModelName = "All Reviews";
     ViewData["Title"] = ModelName;
 }
 
 <h2>@ModelName</h2>
 
-<p>
-    <a asp-action="Create" class="btn btn-success">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -27,6 +24,9 @@
                 </th>
             <th>
                 @Html.DisplayNameFor(model => model.Pizza)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User.Email)
             </th>
             <th></th>
         </tr>
@@ -50,9 +50,10 @@
                 @Html.DisplayFor(modelItem => item.Pizza.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @Html.DisplayFor(modelItem => item.User.Email)
+            </td>
+            <td>
+                <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">Details</a>
             </td>
         </tr>
 }

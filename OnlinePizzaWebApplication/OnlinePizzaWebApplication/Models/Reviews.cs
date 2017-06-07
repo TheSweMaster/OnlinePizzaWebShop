@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -28,6 +29,10 @@ namespace OnlinePizzaWebApplication.Models
         public int PizzaId { get; set; }
 
         public virtual Pizzas Pizza { get; set; }
+
+        public string UserId { get; set; }
+
+        public IdentityUser User { get; set; }
 
     }
 }
