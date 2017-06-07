@@ -1,13 +1,14 @@
-@model IEnumerable<OnlinePizzaWebApplication.Models.Reviews>
+@model IEnumerable<Reviews>
 
 @{
-    ViewData["Title"] = "Index";
+    var ModelName = "Reviews";
+    ViewData["Title"] = ModelName;
 }
 
-<h2>Index</h2>
+<h2>@ModelName</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success">Create New</a>
 </p>
 <table class="table">
     <thead>

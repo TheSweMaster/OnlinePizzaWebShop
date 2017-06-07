@@ -6,23 +6,27 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlinePizzaWebApplication.Models;
+using OnlinePizzaWebApplication.Repositories;
 
 namespace OnlinePizzaWebApplication.Controllers
 {
     public class PizzasController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IPizzaRepository _pizzaRepo;
+        private readonly ICategoryRepository _categoryRepo;
 
-        public PizzasController(AppDbContext context)
+        public PizzasController(AppDbContext context, IPizzaRepository pizzaRepo, ICategoryRepository categoryRepo)
         {
-            _context = context;    
+            _context = context;
+            _pizzaRepo = pizzaRepo;
+            _categoryRepo = categoryRepo;
         }
 
         // GET: Pizzas
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Pizzas.Include(p => p.Category);
-            return View(await appDbContext.ToListAsync());
+            return View(await _pizzaRepo.GetAllIncludedAsync());
         }
 
         // GET: Pizzas/Details/5
@@ -33,9 +37,8 @@ namespace OnlinePizzaWebApplication.Controllers
                 return NotFound();
             }
 
-            var pizzas = await _context.Pizzas
-                .Include(p => p.Category)
-                .SingleOrDefaultAsync(m => m.Id == id);
+            var pizzas = await _pizzaRepo.GetByIdIncludedAsync(id);
+
             if (pizzas == null)
             {
                 return NotFound();
@@ -47,7 +50,7 @@ namespace OnlinePizzaWebApplication.Controllers
         // GET: Pizzas/Create
         public IActionResult Create()
         {
-            ViewData["CategoriesId"] = new SelectList(_context.Categories, "Id", "Name");
+            ViewData["CategoriesId"] = new SelectList(_categoryRepo.GetAll(), "Id", "Name");
             return View();
         }
 
@@ -60,11 +63,11 @@ namespace OnlinePizzaWebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(pizzas);
-                await _context.SaveChangesAsync();
+                _pizzaRepo.Add(pizzas);
+                await _pizzaRepo.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewData["CategoriesId"] = new SelectList(_context.Categories, "Id", "Name", pizzas.CategoriesId);
+            ViewData["CategoriesId"] = new SelectList(_categoryRepo.GetAll(), "Id", "Name", pizzas.CategoriesId);
             return View(pizzas);
         }
 
@@ -76,12 +79,13 @@ namespace OnlinePizzaWebApplication.Controllers
                 return NotFound();
             }
 
-            var pizzas = await _context.Pizzas.SingleOrDefaultAsync(m => m.Id == id);
+            var pizzas = await _pizzaRepo.GetByIdAsync(id);
+
             if (pizzas == null)
             {
                 return NotFound();
             }
-            ViewData["CategoriesId"] = new SelectList(_context.Categories, "Id", "Name", pizzas.CategoriesId);
+            ViewData["CategoriesId"] = new SelectList(_categoryRepo.GetAll(), "Id", "Name", pizzas.CategoriesId);
             return View(pizzas);
         }
 
@@ -101,8 +105,8 @@ namespace OnlinePizzaWebApplication.Controllers
             {
                 try
                 {
-                    _context.Update(pizzas);
-                    await _context.SaveChangesAsync();
+                    _pizzaRepo.Update(pizzas);
+                    await _pizzaRepo.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -117,7 +121,7 @@ namespace OnlinePizzaWebApplication.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["CategoriesId"] = new SelectList(_context.Categories, "Id", "Name", pizzas.CategoriesId);
+            ViewData["CategoriesId"] = new SelectList(_categoryRepo.GetAll(), "Id", "Name", pizzas.CategoriesId);
             return View(pizzas);
         }
 
@@ -129,9 +133,8 @@ namespace OnlinePizzaWebApplication.Controllers
                 return NotFound();
             }
 
-            var pizzas = await _context.Pizzas
-                .Include(p => p.Category)
-                .SingleOrDefaultAsync(m => m.Id == id);
+            var pizzas = await _pizzaRepo.GetByIdIncludedAsync(id);
+
             if (pizzas == null)
             {
                 return NotFound();
@@ -145,15 +148,15 @@ namespace OnlinePizzaWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var pizzas = await _context.Pizzas.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Pizzas.Remove(pizzas);
-            await _context.SaveChangesAsync();
+            var pizzas = await _pizzaRepo.GetByIdAsync(id);
+            _pizzaRepo.Remove(pizzas);
+            await _pizzaRepo.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
         private bool PizzasExists(int id)
         {
-            return _context.Pizzas.Any(e => e.Id == id);
+            return _pizzaRepo.Exists(id);
         }
     }
 }

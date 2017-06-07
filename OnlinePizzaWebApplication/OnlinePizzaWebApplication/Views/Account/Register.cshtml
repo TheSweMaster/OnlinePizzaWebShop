@@ -1,0 +1,44 @@
+@model RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h2>Register at the OnlinePizzaShop today, It's free!</h2>
+<form asp-controller="Account" asp-action="Register" method="post" class="form-horizontal" role="form">
+    <h4>Create a new account and order your first pizza today!</h4>
+    <hr />
+    <ul>
+        @if (Model.Errors.Count() > 0)
+        {
+            @foreach (var error in Model.Errors)
+            {
+                <li><div asp-validation-summary="All" class="text-danger"> @error</div> </li>
+                @*<div asp-validation-summary="All" class="text-danger"> @error</div>*@
+            }
+        }
+    </ul>
+    <div class="form-group">
+        <label asp-for="Email" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Register" class="btn btn-primary" />
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

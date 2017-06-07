@@ -6,22 +6,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlinePizzaWebApplication.Models;
+using OnlinePizzaWebApplication.Repositories;
 
 namespace OnlinePizzaWebApplication.Controllers
 {
     public class CategoriesController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly ICategoryRepository _categoryRepo;
 
-        public CategoriesController(AppDbContext context)
+        public CategoriesController(AppDbContext context, ICategoryRepository categoryRepo)
         {
-            _context = context;    
+            _context = context;
+            _categoryRepo = categoryRepo;
         }
 
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Categories.ToListAsync());
+            return View(await _categoryRepo.GetAllAsync());
         }
 
         // GET: Categories/Details/5
@@ -32,8 +35,8 @@ namespace OnlinePizzaWebApplication.Controllers
                 return NotFound();
             }
 
-            var categories = await _context.Categories
-                .SingleOrDefaultAsync(m => m.Id == id);
+            var categories = await _categoryRepo.GetByIdAsync(id);
+
             if (categories == null)
             {
                 return NotFound();
@@ -57,8 +60,8 @@ namespace OnlinePizzaWebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(categories);
-                await _context.SaveChangesAsync();
+                _categoryRepo.Add(categories);
+                await _categoryRepo.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(categories);
@@ -72,7 +75,8 @@ namespace OnlinePizzaWebApplication.Controllers
                 return NotFound();
             }
 
-            var categories = await _context.Categories.SingleOrDefaultAsync(m => m.Id == id);
+            var categories = await _categoryRepo.GetByIdAsync(id);
+
             if (categories == null)
             {
                 return NotFound();
@@ -96,8 +100,8 @@ namespace OnlinePizzaWebApplication.Controllers
             {
                 try
                 {
-                    _context.Update(categories);
-                    await _context.SaveChangesAsync();
+                    _categoryRepo.Update(categories);
+                    await _categoryRepo.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -123,8 +127,8 @@ namespace OnlinePizzaWebApplication.Controllers
                 return NotFound();
             }
 
-            var categories = await _context.Categories
-                .SingleOrDefaultAsync(m => m.Id == id);
+            var categories = await _categoryRepo.GetByIdAsync(id);
+
             if (categories == null)
             {
                 return NotFound();
@@ -138,15 +142,16 @@ namespace OnlinePizzaWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var categories = await _context.Categories.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Categories.Remove(categories);
-            await _context.SaveChangesAsync();
+            var categories = await _categoryRepo.GetByIdAsync(id);
+            _categoryRepo.Remove(categories);
+            await _categoryRepo.SaveChangesAsync();
+
             return RedirectToAction("Index");
         }
 
         private bool CategoriesExists(int id)
         {
-            return _context.Categories.Any(e => e.Id == id);
+            return _categoryRepo.Exists(id);
         }
     }
 }

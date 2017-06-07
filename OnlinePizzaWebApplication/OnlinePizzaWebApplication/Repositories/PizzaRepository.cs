@@ -35,6 +35,16 @@ namespace OnlinePizzaWebApplication.Repositories
             return await _context.Pizzas.ToListAsync();
         }
 
+        public async Task<IEnumerable<Pizzas>> GetAllIncludedAsync()
+        {
+            return await _context.Pizzas.Include(p => p.Category).Include(p => p.Reviews).Include(p => p.PizzaIngredients).ToListAsync();
+        }
+
+        public IEnumerable<Pizzas> GetAllIncluded()
+        {
+            return _context.Pizzas.Include(p => p.Category).Include(p => p.Reviews).Include(p => p.PizzaIngredients).ToList();
+        }
+
         public Pizzas GetById(int? id)
         {
             return _context.Pizzas.FirstOrDefault(p => p.Id == id);
@@ -43,6 +53,16 @@ namespace OnlinePizzaWebApplication.Repositories
         public async Task<Pizzas> GetByIdAsync(int? id)
         {
             return await _context.Pizzas.FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public Pizzas GetByIdIncluded(int? id)
+        {
+            return _context.Pizzas.Include(p => p.Category).Include(p => p.Reviews).Include(p => p.PizzaIngredients).FirstOrDefault(p => p.Id == id);
+        }
+
+        public async Task<Pizzas> GetByIdIncludedAsync(int? id)
+        {
+            return await _context.Pizzas.Include(p => p.Category).Include(p => p.Reviews).Include(p => p.PizzaIngredients).FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public bool Exists(int id)
