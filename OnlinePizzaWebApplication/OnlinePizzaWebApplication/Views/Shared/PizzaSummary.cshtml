@@ -1,0 +1,24 @@
+@model Pizzas
+
+@{
+    ViewData["Title"] = "PizzaSummary";
+}
+<div class="col-sm-4 col-lg-4 col-md-4">
+    <div class="thumbnail">
+        <img src="@Model.ImageUrl" alt="Picture of @Model.Name">
+        <div class="caption">
+            <h3 class="pull-right">@Model.Price.ToString("c")</h3>
+            <h3>
+                <a asp-controller="Pizzas" asp-action="DisplayDetails" asp-route-id="@Model.Id">@Model.Name</a>
+            </h3>
+            <h5><b>Category: @Model.Category.Name</b></h5>
+            <p>@Model.Description</p>
+        </div>
+        <div class="addToCart">
+            <p class="button">
+                <a class="btn btn-primary" asp-controller="ShoppingCart" asp-action="AddToShoppingCart"
+                   asp-route-pieId="@Model.Id">Add Pizza</a>
+            </p>
+        </div>
+    </div>
+</div>

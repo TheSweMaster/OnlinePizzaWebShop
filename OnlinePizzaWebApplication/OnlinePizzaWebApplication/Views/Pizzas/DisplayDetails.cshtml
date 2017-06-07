@@ -1,0 +1,138 @@
+@model Pizzas
+
+@{
+    var ModelName = "Pizza Details";
+    ViewData["Title"] = ModelName;
+}
+
+<h2>@ModelName</h2>
+<hr />
+
+@*<div>
+    <h4>Pizzas</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ImageUrl)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ImageUrl)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IsPizzaOfTheWeek)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IsPizzaOfTheWeek)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Category.Name)
+        </dd>
+    </dl>
+</div>*@
+
+<div>
+    <a asp-action="ListAll">Back to List</a>
+</div>
+
+<div class="thumbnail">
+    <img alt="@Model.Name" src="@Model.ImageUrl">
+    <div class="caption-full">
+        <h3 class="pull-right">@Model.Price</h3>
+        <h3>
+            <a href="#">@Model.Name</a>
+        </h3>
+        <h4>Category: @Model.Category.Name</h4>
+        <p>@Model.Description</p>
+        <p>
+            <div><b>List of Ingredients:</b></div>
+
+            @if (ViewBag.PizzaIngredients.Count > 0)
+            {
+                @foreach (var ing in ViewBag.PizzaIngredients)
+                {
+                    <div> @ing </div>
+                }
+            }
+            else
+            {
+                <div>No @Html.DisplayNameFor(Model => Model.PizzaIngredients) was found. </div>
+            }
+        </p>
+        <p>
+            @if (ViewBag.AverageReviewScore > 0)
+            {
+                <div>Average Review Score (1-5): @ViewBag.AverageReviewScore</div>
+            }
+            else
+            {
+                <div>No Reviews was found. </div>
+            }
+
+        </p>
+        @*<p>
+            <b>Reviews of Pizza:</b>
+            <br />
+            @if (ViewBag.Reviews.Count > 0)
+            {
+                @foreach (var rev in ViewBag.Reviews)
+                {
+                    <dl class="dl-horizontal">
+                        <dt>
+                            Title
+                        </dt>
+                        <dd>
+                            @rev.Title
+                        </dd>
+                        <dt>
+                            Description
+                        </dt>
+                        <dd>
+                            @rev.Description
+                        </dd>
+                        <dt>
+                            Grade (0-5)
+                        </dt>
+                        <dd>
+                            @rev.Grade
+                        </dd>
+                        <dt>
+                            Date
+                        </dt>
+                        <dd>
+                            @rev.Date
+                        </dd>
+                    </dl>
+                }
+            }
+            else
+            {
+                <div>No @Html.DisplayNameFor(Model => Model.Reviews) was found. </div>
+            }
+        </p>*@
+        <p class="button">
+            <a class="btn btn-primary" asp-controller="ShoppingCart" asp-action="AddToShoppingCart"
+               asp-route-pieId="@Model.Id">Add Pizza</a>
+        </p>
+    </div>
+</div>

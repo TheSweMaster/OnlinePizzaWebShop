@@ -24,15 +24,6 @@ namespace OnlinePizzaWebApplication.Controllers
             _userManager = userManager;
         }
 
-        //public IActionResult MyAction()
-        //{
-        //    var userId = _userManager.GetUserId(HttpContext.User);
-
-        //    var model = GetSomeModelByUserId(userId);
-
-        //    return View(model);
-        //}
-
         // GET: Reviews
         [Authorize]
         public async Task<IActionResult> Index()
@@ -87,13 +78,14 @@ namespace OnlinePizzaWebApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Grade,Date,PizzaId")] Reviews reviews)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,Grade,PizzaId")] Reviews reviews)
         {
             if (ModelState.IsValid)
             {
                 var userId = _userManager.GetUserId(HttpContext.User);
                 reviews.UserId = userId;
 
+                reviews.Date = DateTime.Now;
                 _context.Add(reviews);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -132,7 +124,7 @@ namespace OnlinePizzaWebApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Grade,Date,PizzaId")] Reviews reviews)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Grade,PizzaId")] Reviews reviews)
         {
             if (id != reviews.Id)
             {
@@ -141,22 +133,23 @@ namespace OnlinePizzaWebApplication.Controllers
 
             if (ModelState.IsValid)
             {
+                var userId = _userManager.GetUserId(HttpContext.User);
                 try
                 {
+                    if (reviews.Date == null)
+                    {
+                        reviews.Date = DateTime.Now;
+                    }
+                    reviews.UserId = userId;
 
                     _context.Update(reviews);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    var userId = _userManager.GetUserId(HttpContext.User);
                     if (!ReviewsExists(reviews.Id))
                     {
                         return NotFound();
-                    }
-                    else if (reviews.UserId != userId)
-                    {
-                        return BadRequest("You do not have permissions to edit this review.");
                     }
                     else
                     {
@@ -189,7 +182,7 @@ namespace OnlinePizzaWebApplication.Controllers
 
             if (reviews.UserId != userId)
             {
-                return BadRequest("You do not have permissions to edit this review.");
+                return BadRequest("You do not have permissions to delete this review.");
             }
 
             return View(reviews);

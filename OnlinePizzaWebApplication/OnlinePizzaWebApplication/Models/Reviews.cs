@@ -20,7 +20,7 @@ namespace OnlinePizzaWebApplication.Models
         [Required]
         public string Description { get; set; }
 
-        [Range(0, 5)]
+        [Range(1, 5)]
         public int Grade { get; set; }
 
         public DateTime Date { get; set; }

@@ -29,6 +29,12 @@ namespace OnlinePizzaWebApplication.Controllers
             return View(await _pizzaRepo.GetAllIncludedAsync());
         }
 
+        // GET: Pizzas
+        public async Task<IActionResult> ListAll()
+        {
+            return View(await _pizzaRepo.GetAllIncludedAsync());
+        }
+
         // GET: Pizzas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -38,6 +44,42 @@ namespace OnlinePizzaWebApplication.Controllers
             }
 
             var pizzas = await _pizzaRepo.GetByIdIncludedAsync(id);
+
+            if (pizzas == null)
+            {
+                return NotFound();
+            }
+
+            return View(pizzas);
+        }
+
+        // GET: Pizzas/Details/5
+        public async Task<IActionResult> DisplayDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var pizzas = await _pizzaRepo.GetByIdIncludedAsync(id);
+
+            var listOfIngredients = await _context.PizzaIngredients.Where(x => x.PizzaId == id).Select(x => x.Ingredient.Name).ToListAsync();
+            ViewBag.PizzaIngredients = listOfIngredients;
+
+            //var listOfReviews = await _context.Reviews.Where(x => x.PizzaId == id).Select(x => x).ToListAsync();
+            //ViewBag.Reviews = listOfReviews;
+            double score;
+            if (_context.Reviews.Any(x => x.PizzaId == id))
+            {
+                var review = _context.Reviews.Where(x => x.PizzaId == id);
+                score = review.Average(x => x.Grade);
+                score = Math.Round(score, 2);
+            }
+            else
+            {
+                score = 0;
+            }
+            ViewBag.AverageReviewScore = score;
 
             if (pizzas == null)
             {

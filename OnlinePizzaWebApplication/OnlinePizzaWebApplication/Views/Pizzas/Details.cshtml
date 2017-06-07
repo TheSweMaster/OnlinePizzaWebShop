@@ -1,4 +1,4 @@
-@model OnlinePizzaWebApplication.Models.Pizzas
+@model Pizzas
 
 @{
     ViewData["Title"] = "Details";
@@ -9,6 +9,9 @@
 <div>
     <h4>Pizzas</h4>
     <hr />
+    @*<div class="img-thumbnail">
+        <img src="@Model.ImageUrl" alt="Picture of @Model.Name">
+    </div>*@
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Name)

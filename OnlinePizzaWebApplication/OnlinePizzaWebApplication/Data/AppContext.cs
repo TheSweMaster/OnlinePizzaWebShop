@@ -27,13 +27,5 @@ namespace OnlinePizzaWebApplication.Models
         //      "Server = (localdb)\\mssqllocaldb; Database = PizzaShop; Trusted_Connection = True; ");
         //}
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    // Add Identity related model configuration
-        //    base.OnModelCreating(modelBuilder);
-
-        //    // Your fluent modeling here
-        //}
-
     }
 }
