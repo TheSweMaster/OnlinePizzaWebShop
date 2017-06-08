@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlinePizzaWebApplication.Data;
 using OnlinePizzaWebApplication.Repositories;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace OnlinePizzaWebApplication
 {
@@ -71,7 +72,7 @@ namespace OnlinePizzaWebApplication
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, AppDbContext context)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, AppDbContext context, IServiceProvider serviceProvider)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -97,7 +98,43 @@ namespace OnlinePizzaWebApplication
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            DbInitializer.Initialize(context);
+            await DbInitializer.Initialize(context, serviceProvider);
+            //CreateRolesandUsers(context);
+            await CreateRolesandUsers(serviceProvider);
+
         }
+
+        private async Task CreateRolesandUsers(IServiceProvider serviceProvider)
+        {
+            var _roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var _userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+            bool roleExists = await _roleManager.RoleExistsAsync("Admin");
+            if (!roleExists)
+            {
+                // first we create Admin role   
+                var role = new IdentityRole();
+                role.Name = "Admin";
+                await _roleManager.CreateAsync(role);
+
+                //Here we create a Admin super user who will maintain the website                   
+
+                var user = new IdentityUser();
+                user.UserName = "admin";
+                user.Email = "admin@default.com";
+
+                string userPassword = "Password123";
+
+                var userResult = await _userManager.CreateAsync(user, userPassword);
+
+                //Add default User to Role Admin    
+                if (userResult.Succeeded)
+                {
+                    var result = _userManager.AddToRoleAsync(user, "Admin");
+                }
+            }
+            
+        }
+
     }
 }

@@ -102,6 +102,15 @@ namespace OnlinePizzaWebApplication.Repositories
             var reviews = _context.Reviews.ToList();
             _context.Reviews.RemoveRange(reviews);
 
+            var userRoles = _context.UserRoles.ToList();
+            _context.UserRoles.RemoveRange(userRoles);
+
+            var roles = _context.Roles.ToList();
+            _context.Roles.RemoveRange(roles);
+
+            var users = _context.Users.ToList();
+            _context.Users.RemoveRange(users);
+
             var pizzas = _context.Pizzas.ToList();
             _context.Pizzas.RemoveRange(pizzas);
 
