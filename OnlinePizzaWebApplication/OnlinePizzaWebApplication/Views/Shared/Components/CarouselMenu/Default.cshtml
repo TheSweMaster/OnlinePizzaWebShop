@@ -1,0 +1,36 @@
+@model IEnumerable<Pizzas>
+
+<div class="row carousel-holder">
+    <div class="col-md-12">
+        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                @foreach (var pizza in Model)
+                {
+                    <li data-target="#carousel-example-generic" data-slide-to="@pizza.Id"></li>
+                }
+            </ol>
+            <div class="carousel-inner">
+                <div class="item active">
+                    <div class="text-center"><b>Weekly Specials!</b></div>
+                    <img class="slide-image" src="https://cdn2.hubspot.net/hub/29066/file-13681898-jpg/images/istock_000013418237medium.jpg" alt="Home page picture">
+                </div>
+                @foreach (var pizza in Model)
+                {
+                <div class="item">
+                    <div class="text-center"><b>@pizza.Name</b></div>
+                    <a asp-controller="Pizzas" asp-action="DisplayDetails" asp-route-id="@pizza.Id"> 
+                        <img class="slide-image" src="@pizza.ImageUrl" alt="Picture of @pizza.Name">
+                    </a>
+                </div>
+                }
+            </div>
+            <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+            <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+        </div>
+    </div>
+</div>

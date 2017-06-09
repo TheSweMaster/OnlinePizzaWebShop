@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlinePizzaWebApplication.Models;
 using OnlinePizzaWebApplication.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OnlinePizzaWebApplication.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class PizzasController : Controller
     {
         private readonly AppDbContext _context;
@@ -30,9 +32,40 @@ namespace OnlinePizzaWebApplication.Controllers
         }
 
         // GET: Pizzas
+        [AllowAnonymous]
         public async Task<IActionResult> ListAll()
         {
             return View(await _pizzaRepo.GetAllIncludedAsync());
+        }
+
+        // GET: Pizzas
+        [AllowAnonymous]
+        public async Task<IActionResult> ListCategory(string categoryName)
+        {
+            bool categoryExtist = _context.Categories.Any(c => c.Name == categoryName);
+            if (!categoryExtist)
+            {
+                return NotFound();
+            }
+
+            var category = await _context.Categories.FirstOrDefaultAsync(c => c.Name == categoryName);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            bool anyPizzas = await _context.Pizzas.AnyAsync(x => x.Category == category);
+            if (!anyPizzas)
+            {
+                return NotFound($"No Pizzas were found in the category: {categoryName}");
+            }
+
+            var pizzas = _context.Pizzas.Where(x => x.Category == category)
+                .Include(x => x.Category).Include(x => x.Reviews);
+
+            ViewBag.CurrentCategory = category.Name;
+            return View(pizzas);
         }
 
         // GET: Pizzas/Details/5
@@ -54,6 +87,7 @@ namespace OnlinePizzaWebApplication.Controllers
         }
 
         // GET: Pizzas/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> DisplayDetails(int? id)
         {
             if (id == null)

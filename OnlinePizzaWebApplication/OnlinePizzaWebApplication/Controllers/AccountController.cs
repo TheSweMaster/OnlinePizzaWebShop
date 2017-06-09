@@ -10,7 +10,7 @@ using OnlinePizzaWebApplication.ViewModels;
 
 namespace OnlinePizzaWebApplication.Controllers
 {
-    [Authorize]
+    [AllowAnonymous]
     public class AccountController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
@@ -91,10 +91,17 @@ namespace OnlinePizzaWebApplication.Controllers
             return View(model);
         }
 
+        [Authorize]
         public async Task<IActionResult> LogOut()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
 
     }

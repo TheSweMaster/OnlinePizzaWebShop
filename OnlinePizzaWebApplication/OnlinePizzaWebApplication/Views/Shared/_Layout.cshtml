@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - OnlinePizzaApp</title>
+    <title>@ViewData["Title"] - Pizza Shop</title>
 
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -28,17 +28,15 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">OnlinePizzaApp</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Pizza Shop</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Pizzas" asp-action="Index">Pizzas</a></li>
-                    <li><a asp-area="" asp-controller="Categories" asp-action="Index">Categories</a></li>
-                    <li><a asp-area="" asp-controller="Ingredients" asp-action="Index">Ingredients</a></li>
-                    <li><a asp-area="" asp-controller="PizzaIngredients" asp-action="Index">PizzaIngredients</a></li>
+                    <li><a asp-area="" asp-controller="Pizzas" asp-action="ListAll">Pizzas</a></li>
+                    @await Component.InvokeAsync("CategoryMenu")
                     <li><a asp-area="" asp-controller="Reviews" asp-action="Index">Reviews</a></li>
-                    @*<li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>*@
+                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
@@ -48,7 +46,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; Jacob Gandemo 2017 - OnlinePizzaWebApplication</p>
+            <p>&copy; Jacob Gandemo @DateTime.Now.Year - Pizza Shop</p>
         </footer>
     </div>
 

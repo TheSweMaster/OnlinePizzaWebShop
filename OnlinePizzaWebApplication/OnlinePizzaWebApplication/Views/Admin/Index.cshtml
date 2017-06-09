@@ -1,9 +1,15 @@
 
 @{
-    ViewData["Title"] = "Index";
+    var ModelName = "Admin Page";
+    ViewData["Title"] = ModelName;
 }
 
-<h2>Admin Index</h2>
+<h2>@ModelName</h2>
 
-<a asp-controller="Admin" asp-action="ClearDatabase">ClearDatabase</a>
+<h3><a asp-controller="Admin" asp-action="ClearDatabase">ClearDatabase</a></h3>
+<h3><a asp-controller="Pizzas" asp-action="Index">Pizzas</a></h3>
+<h3><a asp-controller="Categories" asp-action="Index">Categories</a></h3>
+<h3><a asp-controller="Ingredients" asp-action="Index">Ingredients</a></h3>
+<h3><a asp-controller="PizzaIngredients" asp-action="Index">PizzaIngredients</a></h3>
+<h3><a asp-controller="Reviews" asp-action="AdminIndex">Reviews</a></h3>
 

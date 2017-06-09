@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlinePizzaWebApplication.Models;
 using OnlinePizzaWebApplication.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OnlinePizzaWebApplication.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CategoriesController : Controller
     {
         private readonly AppDbContext _context;

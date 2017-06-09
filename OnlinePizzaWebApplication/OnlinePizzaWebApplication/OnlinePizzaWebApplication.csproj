@@ -27,6 +27,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Account\" />
+    <Folder Include="Views\Shared\Components\CategoryMenu\" />
+    <Folder Include="Views\Shared\Components\CarouselMenu\" />
   </ItemGroup>
 
 </Project>

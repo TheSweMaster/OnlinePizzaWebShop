@@ -36,7 +36,8 @@ namespace OnlinePizzaWebApplication.Data
             var piz2 = new Pizzas { Name = "Veggie", Price = 70.00M, Category = cat3, Description = "Veggie Pizza for vegitarians", ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/3/3f/Vegetarian_pizza.jpg", IsPizzaOfTheWeek = false };
             var piz3 = new Pizzas { Name = "Hawaii", Price = 75.00M, Category = cat1, Description = "A nice tasting pizza from Hawaii.", ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/d/d1/Hawaiian_pizza_1.jpg", IsPizzaOfTheWeek = true };
             var piz4 = new Pizzas { Name = "Margarita", Price = 65.00M, Category = cat1, Description = "A basic pizza for everyone.", ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/a/a3/Eq_it-na_pizza-margherita_sep2005_sml.jpg", IsPizzaOfTheWeek = false };
-            var piz5 = new Pizzas { Name = "Kebab Special", Price = 85.00M, Category = cat2, Description = "A special pizza with kebab for the hungry one.", ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/7/7c/Pizza_bella_vista.jpg", IsPizzaOfTheWeek = true };
+            var piz5 = new Pizzas { Name = "Kebab Special", Price = 85.00M, Category = cat2, Description = "A special pizza with kebab for the hungry one.", ImageUrl = "http://2.bp.blogspot.com/_3cSn3Qz_4IA/THkYqKwGw1I/AAAAAAAAAPg/ybKpvRbjDWE/s1600/matsl%C3%A4kten+002.JPG", IsPizzaOfTheWeek = true };
+            var piz6 = new Pizzas { Name = "Pescatore", Price = 80.00M, Category = cat1, Description = "A special pizza with kebab for the hungry one.", ImageUrl = "https://isinginthekitchen.files.wordpress.com/2014/07/dsc_0231.jpg", IsPizzaOfTheWeek = true };
 
             var pizs = new List<Pizzas>()
             {
@@ -119,6 +120,12 @@ namespace OnlinePizzaWebApplication.Data
                 new PizzaIngredients { Ingredient = ing6, Pizza = piz5 },
                 new PizzaIngredients { Ingredient = ing4, Pizza = piz5 },
                 new PizzaIngredients { Ingredient = ing11, Pizza = piz5 },
+
+                new PizzaIngredients { Ingredient = ing1, Pizza = piz1 },
+                new PizzaIngredients { Ingredient = ing2, Pizza = piz1 },
+                new PizzaIngredients { Ingredient = ing3, Pizza = piz1 },
+                new PizzaIngredients { Ingredient = ing4, Pizza = piz1 },
+                new PizzaIngredients { Ingredient = ing7, Pizza = piz1 },
 
             };
 

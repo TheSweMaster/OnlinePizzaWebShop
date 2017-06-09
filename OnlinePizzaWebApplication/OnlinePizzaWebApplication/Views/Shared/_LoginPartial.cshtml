@@ -14,7 +14,7 @@
         </ul>
     </form>*@
     <ul class="nav navbar-nav navbar-right">
-        <li><a>Welcome, @User.Identity.Name</a></li>
+        <li><a href="">Welcome, @User.Identity.Name</a></li>
         @*@await Component.InvokeAsync("ShoppingCartSummary")*@
         <li><a id="logoutLink" asp-controller="Account" asp-action="LogOut">Log Out</a></li>
     </ul>

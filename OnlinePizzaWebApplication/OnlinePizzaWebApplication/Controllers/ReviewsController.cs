@@ -24,6 +24,13 @@ namespace OnlinePizzaWebApplication.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AdminIndex()
+        {
+            var reviews = await _context.Reviews.Include(r => r.Pizza).Include(r => r.User).ToListAsync();
+            return View(reviews);
+        }
+
         // GET: Reviews
         [Authorize]
         public async Task<IActionResult> Index()
@@ -43,6 +50,30 @@ namespace OnlinePizzaWebApplication.Controllers
         public async Task<IActionResult> ListAll()
         {
             var reviews = await _context.Reviews.Include(r => r.Pizza).Include(r => r.User).ToListAsync();
+            return View(reviews);
+        }
+
+        // GET: Reviews
+        [AllowAnonymous]
+        public async Task<IActionResult> PizzaReviews(int? pizzaId)
+        {
+            if (pizzaId == null)
+            {
+                return NotFound();
+            }
+            var pizza = _context.Pizzas.FirstOrDefault(x => x.Id == pizzaId);
+            if (pizza == null)
+            {
+                return NotFound();
+            }
+            var reviews = await _context.Reviews.Include(r => r.Pizza).Include(r => r.User).Where(x => x.Pizza.Id == pizza.Id).ToListAsync();
+            if (reviews == null)
+            {
+                return NotFound();
+            }
+            ViewBag.PizzaName = pizza.Name;
+            ViewBag.PizzaId = pizza.Id;
+
             return View(reviews);
         }
 
@@ -103,16 +134,22 @@ namespace OnlinePizzaWebApplication.Controllers
             }
 
             var reviews = await _context.Reviews.SingleOrDefaultAsync(m => m.Id == id);
-            var userId = _userManager.GetUserId(HttpContext.User);
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var userRoles = await _userManager.GetRolesAsync(user);
+            bool isAdmin = userRoles.Any(r => r == "Admin");
 
             if (reviews == null)
             {
                 return NotFound();
             }
 
-            if (reviews.UserId != userId)
+            if (isAdmin == false)
             {
-                return BadRequest("You do not have permissions to edit this review.");
+                var userId = _userManager.GetUserId(HttpContext.User);
+                if (reviews.UserId != userId)
+                {
+                    return BadRequest("You do not have permissions to edit this review.");
+                }
             }
 
             ViewData["PizzaId"] = new SelectList(_context.Pizzas, "Id", "Name", reviews.PizzaId);
@@ -124,7 +161,7 @@ namespace OnlinePizzaWebApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Grade,PizzaId")] Reviews reviews)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Grade,Date,PizzaId")] Reviews reviews)
         {
             if (id != reviews.Id)
             {
@@ -173,16 +210,22 @@ namespace OnlinePizzaWebApplication.Controllers
             var reviews = await _context.Reviews
                 .Include(r => r.Pizza)
                 .SingleOrDefaultAsync(m => m.Id == id);
-            var userId = _userManager.GetUserId(HttpContext.User);
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var userRoles = await _userManager.GetRolesAsync(user);
+            bool isAdmin = userRoles.Any(r => r == "Admin");
 
             if (reviews == null)
             {
                 return NotFound();
             }
 
-            if (reviews.UserId != userId)
+            if (isAdmin == false)
             {
-                return BadRequest("You do not have permissions to delete this review.");
+                var userId = _userManager.GetUserId(HttpContext.User);
+                if (reviews.UserId != userId)
+                {
+                    return BadRequest("You do not have permissions to edit this review.");
+                }
             }
 
             return View(reviews);

@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlinePizzaWebApplication.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OnlinePizzaWebApplication.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class PizzaIngredientsController : Controller
     {
         private readonly AppDbContext _context;
