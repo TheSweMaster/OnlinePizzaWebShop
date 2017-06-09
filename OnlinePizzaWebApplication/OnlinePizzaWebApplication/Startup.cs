@@ -99,12 +99,11 @@ namespace OnlinePizzaWebApplication
             });
 
             await DbInitializer.Initialize(context, serviceProvider);
-            //CreateRolesandUsers(context);
-            await CreateRolesandUsers(serviceProvider);
+            await CreateAdminRoleAsync(serviceProvider);
 
         }
 
-        private async Task CreateRolesandUsers(IServiceProvider serviceProvider)
+        private async Task CreateAdminRoleAsync(IServiceProvider serviceProvider)
         {
             var _roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var _userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();

@@ -121,11 +121,11 @@ namespace OnlinePizzaWebApplication.Data
                 new PizzaIngredients { Ingredient = ing4, Pizza = piz5 },
                 new PizzaIngredients { Ingredient = ing11, Pizza = piz5 },
 
-                new PizzaIngredients { Ingredient = ing1, Pizza = piz1 },
-                new PizzaIngredients { Ingredient = ing2, Pizza = piz1 },
-                new PizzaIngredients { Ingredient = ing3, Pizza = piz1 },
-                new PizzaIngredients { Ingredient = ing4, Pizza = piz1 },
-                new PizzaIngredients { Ingredient = ing7, Pizza = piz1 },
+                new PizzaIngredients { Ingredient = ing1, Pizza = piz6 },
+                new PizzaIngredients { Ingredient = ing2, Pizza = piz6 },
+                new PizzaIngredients { Ingredient = ing3, Pizza = piz6 },
+                new PizzaIngredients { Ingredient = ing4, Pizza = piz6 },
+                new PizzaIngredients { Ingredient = ing7, Pizza = piz6 },
 
             };
 
