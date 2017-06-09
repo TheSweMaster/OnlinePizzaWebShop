@@ -14,14 +14,3 @@
 
 @await Component.InvokeAsync("CarouselMenu")
 
-
-@*@await Html.PartialAsync("Carousel")
-
-<div class="row">
-
-    @foreach (var pizza in Model)
-    {
-        @Html.Partial("PieOfTheWeekSummary", pizza)
-    }
-
-</div>*@

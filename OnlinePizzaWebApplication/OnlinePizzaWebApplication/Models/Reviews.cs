@@ -23,7 +23,6 @@ namespace OnlinePizzaWebApplication.Models
         [Range(1, 5)]
         public int Grade { get; set; }
 
-        [Editable(false)]
         public DateTime Date { get; set; }
 
         [DisplayName("Select Pizza")]

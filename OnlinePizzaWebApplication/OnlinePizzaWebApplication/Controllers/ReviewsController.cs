@@ -35,14 +35,20 @@ namespace OnlinePizzaWebApplication.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            //var userIdTest = "eaff05c2-49b1-4bdc-bd24-8f7a34571428";
-            //var userId = _userManager.GetUserId(HttpContext.User);
-
             var user = await _userManager.GetUserAsync(HttpContext.User);
+            bool isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
 
-            var reviews = _context.Reviews.Include(r => r.Pizza).ToList().Where(r => r.User == user);
-
-            return View(reviews);
+            if (isAdmin)
+            {
+                var allReviews = _context.Reviews.Include(r => r.Pizza).Include(r => r.User).ToList();
+                return View(allReviews);
+            }
+            else
+            {
+                var reviews = _context.Reviews.Include(r => r.Pizza).Include(r => r.User)
+                    .Where(r => r.User == user).ToList();
+                return View(reviews);
+            }
         }
 
         // GET: Reviews

@@ -5,15 +5,11 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    @*<form asp-area="" asp-controller="Account" asp-action="Logout" id="logoutForm"
-          method="post" class="navbar-right">
-        <ul class="nav navbar-nav navbar-right">
-            <li><a>Welcome, @User.Identity.Name</a></li>
-            @await Component.InvokeAsync("ShoppingCartSummary")
-            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log Out</a></li>
-        </ul>
-    </form>*@
     <ul class="nav navbar-nav navbar-right">
+        @if (User.IsInRole("Admin"))
+        {
+            <li><a asp-controller="Admin" asp-action="Index">Admin Page</a></li>
+        }
         <li><a href="">Welcome, @User.Identity.Name</a></li>
         @*@await Component.InvokeAsync("ShoppingCartSummary")*@
         <li><a id="logoutLink" asp-controller="Account" asp-action="LogOut">Log Out</a></li>
