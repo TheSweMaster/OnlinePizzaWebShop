@@ -1,6 +1,9 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    /*background-image: url('../images/bluestripe.jpg');
+    background-repeat: repeat;*/
+    font-family: 'Source Sans Pro', sans-serif;
 }
 
 /* Wrapping element */
@@ -35,3 +38,76 @@ textarea {
         display: none;
     }
 }
+
+.carousel-holder {
+    margin-bottom: 30px;
+}
+
+.carousel-control,
+.item {
+    border-radius: 4px;
+}
+
+.thumbnail img {
+    width: 100%;
+}
+
+.thumbnail {
+    padding: 0;
+}
+
+.thumbnail .caption-full {
+        padding: 9px;
+        color: #333;
+}
+
+footer {
+    margin: 25px 0;
+}
+
+.navbar {
+    background-image: none;
+}
+
+.navbar-header > a {
+    font-size: 1.35em;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    color: white;
+}
+
+.navbar-header:hover > a {
+    color: #bcedff;
+}
+
+.navbar-inverse {
+    background-color: #204ac9;
+    border-color: #003d66;
+}
+
+.nav.navbar-nav.navbar-right li a {
+    color: white;
+    font-size: 1.2em;
+}
+
+.navbar .nav > li > a {
+    font-size: 1.2em;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    color: white;
+}
+
+.navbar .nav > li > a:hover {
+    font-size: 1.2em;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    color: #bcedff;
+}
+
+
+/*.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
+    background-color: lightblue !important;
+    border-color: darkblue !important;
+}
+
+.btn {
+    background-color: darkblue !important;
+    border-color: darkblue !important;
+}*/
