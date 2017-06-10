@@ -1,12 +1,12 @@
-@model SearchPizzasViewModel
+﻿@model SearchPizzasViewModel
 
 @{
-    var pageName = "Pizzas Menu";
-    ViewData["Title"] = pageName;
+    var ModelName = "Search Pizzas";
+    ViewData["Title"] = ModelName;
 }
 
-<h2>@pageName</h2>
-<form asp-controller="Pizzas" asp-action="ListAll">
+<h2>@ModelName</h2>
+<form asp-controller="Pizzas" asp-action="SearchPizzas">
     <div class="form-horizontal">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
@@ -24,14 +24,7 @@
     </div>
 </form>
 
-@if (Model.SearchText != null)
-{
-    <h4>Results</h4>
-}
-else
-{
-    <h4>All Pizzas</h4>
-}
+<h4>Results</h4>
 <hr />
 
 @foreach (var pizza in Model.PizzaList)

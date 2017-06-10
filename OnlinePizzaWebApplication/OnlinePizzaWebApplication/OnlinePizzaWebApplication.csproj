@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Properties\PublishProfiles\OnlinePizzaWebApplication2 - Web Deploy.pubxml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="wwwroot\images\bluestripe.jpg" />
   </ItemGroup>
   <ItemGroup>

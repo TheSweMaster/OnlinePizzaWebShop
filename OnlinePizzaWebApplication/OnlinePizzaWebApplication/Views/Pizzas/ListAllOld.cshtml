@@ -1,0 +1,16 @@
+@model IEnumerable<Pizzas>
+
+@{
+    var ModelName = "Search Pizzas";
+    ViewData["Title"] = ModelName;
+}
+
+<h2>@ModelName</h2>
+<hr />
+
+@foreach (var pizza in Model)
+{
+    @Html.Partial("PizzaSummary", pizza)
+}
+<br />
+    

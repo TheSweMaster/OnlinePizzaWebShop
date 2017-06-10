@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlinePizzaWebApplication.Models;
 using OnlinePizzaWebApplication.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using OnlinePizzaWebApplication.ViewModels;
 
 namespace OnlinePizzaWebApplication.Controllers
 {
@@ -35,7 +36,57 @@ namespace OnlinePizzaWebApplication.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ListAll()
         {
-            return View(await _pizzaRepo.GetAllIncludedAsync());
+            var model = new SearchPizzasViewModel();
+            model.PizzaList = await _pizzaRepo.GetAllIncludedAsync();
+            model.SearchText = null;
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ListAll([Bind("SearchText")] SearchPizzasViewModel model)
+        {
+            var pizzas = await _pizzaRepo.GetAllIncludedAsync();
+            if (model.SearchText == null || model.SearchText == string.Empty)
+            {
+                model.PizzaList = pizzas;
+                return View(model);
+            }
+
+            var input = model.SearchText.Trim();
+            if (input == string.Empty || input == null)
+            {
+                model.PizzaList = pizzas;
+                return View(model);
+            }
+            var search = input.ToLower();
+
+            if (string.IsNullOrEmpty(search))
+            {
+                model.PizzaList = pizzas;
+            }
+            else
+            {
+                var pizzaList = await _context.Pizzas.Include(x => x.Category).Include(x => x.Reviews).Include(x => x.PizzaIngredients).OrderBy(x => x.Name)
+                    .Where(p =>
+                     p.Name.ToLower().Contains(search)
+                  || p.Price.ToString("c").ToLower().Contains(search)
+                  || p.Category.Name.ToLower().Contains(search)
+                  || p.PizzaIngredients.Select(x => x.Ingredient.Name.ToLower()).Contains(search)).ToListAsync();
+
+                if (pizzaList.Any())
+                {
+                    model.PizzaList = pizzaList;
+                }
+                else
+                {
+                    model.PizzaList = new List<Pizzas>();
+                }
+
+            }
+            return View(model);
         }
 
         // GET: Pizzas
@@ -121,6 +172,57 @@ namespace OnlinePizzaWebApplication.Controllers
             }
 
             return View(pizzas);
+        }
+
+        // GET: Pizzas
+        [AllowAnonymous]
+        public async Task<IActionResult> SearchPizzas()
+        {
+            var model = new SearchPizzasViewModel();
+            model.PizzaList = await _pizzaRepo.GetAllIncludedAsync();
+            model.SearchText = null;
+
+            //var result = pizzas.OrderBy(x => x.Name).Where(p =>
+            //     p.Name.Contains(searchText)
+            //  || p.Price.ToString("c").Contains(searchText)
+            //  || p.Category.Name.Contains(searchText)
+            //  || p.PizzaIngredients.Select(x => x.Ingredient.Name).Contains(searchText));
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SearchPizzas([Bind("SearchText")] SearchPizzasViewModel model)
+        {
+            var pizzas = await _pizzaRepo.GetAllIncludedAsync();
+            var search = model.SearchText.ToLower();
+
+            if (string.IsNullOrEmpty(search))
+            {
+                model.PizzaList = pizzas;
+            }
+            else
+            {
+                var pizzaList = await _context.Pizzas.Include(x => x.Category).Include(x => x.Reviews).Include(x => x.PizzaIngredients).OrderBy(x => x.Name)
+                    .Where(p =>
+                     p.Name.ToLower().Contains(search)
+                  || p.Price.ToString("c").ToLower().Contains(search)
+                  || p.Category.Name.ToLower().Contains(search)
+                  || p.PizzaIngredients.Select(x => x.Ingredient.Name.ToLower()).Contains(search)).ToListAsync();
+
+                if (pizzaList.Any())
+                {
+                    model.PizzaList = pizzaList;
+                }
+                else
+                {
+                    model.PizzaList = new List<Pizzas>();
+                }
+
+            }
+            return View(model);
         }
 
         // GET: Pizzas/Create
