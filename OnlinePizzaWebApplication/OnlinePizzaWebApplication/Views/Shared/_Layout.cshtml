@@ -35,6 +35,7 @@
                     <li><a asp-controller="Pizzas" asp-action="ListAll">Pizzas</a></li>
                     @await Component.InvokeAsync("CategoryMenu")
                     <li><a asp-controller="Reviews" asp-action="Index">Reviews</a></li>
+                    @await Component.InvokeAsync("ShoppingCartSummary")
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>

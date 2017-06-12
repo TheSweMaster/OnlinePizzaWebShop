@@ -11,7 +11,7 @@
             <li><a asp-controller="Admin" asp-action="Index">Admin Page</a></li>
         }
         <li><a href="">Welcome, @User.Identity.Name</a></li>
-        @*@await Component.InvokeAsync("ShoppingCartSummary")*@
+        
         <li><a id="logoutLink" asp-controller="Account" asp-action="LogOut">Log Out</a></li>
     </ul>
 }

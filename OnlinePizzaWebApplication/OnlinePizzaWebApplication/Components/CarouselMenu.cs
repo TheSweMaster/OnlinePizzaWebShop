@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OnlinePizzaWebApplication.Models;
 using System;
 using System.Collections.Generic;
@@ -15,9 +16,9 @@ namespace OnlinePizzaWebApplication.Components
             _context = context;
         }
 
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            var pizzas = _context.Pizzas.Where(x => x.IsPizzaOfTheWeek).ToList();
+            var pizzas = await _context.Pizzas.Where(x => x.IsPizzaOfTheWeek).ToListAsync();
             return View(pizzas);
         }
     }

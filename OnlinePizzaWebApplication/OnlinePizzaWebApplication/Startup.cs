@@ -13,6 +13,7 @@ using OnlinePizzaWebApplication.Data;
 using OnlinePizzaWebApplication.Repositories;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 
 namespace OnlinePizzaWebApplication
 {
@@ -41,6 +42,8 @@ namespace OnlinePizzaWebApplication
 
             services.AddTransient<IPizzaRepository, PizzaRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped(sp => ShoppingCart.GetCart(sp));
 
             services.AddMvc();
 

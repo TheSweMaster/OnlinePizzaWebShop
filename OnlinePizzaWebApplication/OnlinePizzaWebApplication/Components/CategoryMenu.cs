@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OnlinePizzaWebApplication.Models;
 using System;
 using System.Collections.Generic;
@@ -15,9 +16,9 @@ namespace OnlinePizzaWebApplication.Components
             _context = context;
         }
 
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            var categories = _context.Categories.OrderBy(c => c.Name);
+            var categories = await _context.Categories.OrderBy(c => c.Name).ToListAsync();
             return View(categories);
         }
     }
