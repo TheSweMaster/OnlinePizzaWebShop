@@ -20,6 +20,7 @@ namespace OnlinePizzaWebApplication.Models
         public DbSet<Ingredients> Ingredients { get; set; }
         public DbSet<PizzaIngredients> PizzaIngredients { get; set; }
         public DbSet<Reviews> Reviews { get; set; }
+        public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
