@@ -1,11 +1,11 @@
 @model IEnumerable<Pizzas>
 
 @{
-    var ModelName = "Pizzas";
-    ViewData["Title"] = ModelName;
+    var pageName = "Pizzas";
+    ViewData["Title"] = pageName;
 }
 
-<h2>@ModelName</h2>
+<h2>@pageName</h2>
 
 <p>
     <a asp-action="Create" class="btn btn-success">Create New</a>

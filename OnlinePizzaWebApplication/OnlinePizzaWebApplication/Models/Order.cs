@@ -26,10 +26,10 @@ namespace OnlinePizzaWebApplication.Models
 
         [Required(ErrorMessage = "Please enter your address")]
         [StringLength(100)]
-        [Display(Name = "Address Line 1")]
+        [Display(Name = "Address 1")]
         public string AddressLine1 { get; set; }
 
-        [Display(Name = "Address Line 2")]
+        [Display(Name = "Address 2")]
         public string AddressLine2 { get; set; }
 
         [Required(ErrorMessage = "Please enter your zip code")]
@@ -68,6 +68,10 @@ namespace OnlinePizzaWebApplication.Models
         [BindNever]
         [ScaffoldColumn(false)]
         public DateTime OrderPlaced { get; set; }
+
+        //[BindNever]
+        //[ScaffoldColumn(false)]
+        //public string OrderStatus { get; set; }
 
     }
 }
