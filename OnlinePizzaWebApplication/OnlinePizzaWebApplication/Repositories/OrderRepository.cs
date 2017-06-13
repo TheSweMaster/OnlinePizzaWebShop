@@ -31,7 +31,6 @@ namespace OnlinePizzaWebApplication.Repositories
                 {
                     Amount = shoppingCartItem.Amount,
                     PizzaId = shoppingCartItem.Pizza.Id,
-                    //OrderId = order.OrderId,
                     Order = order,
                     Price = shoppingCartItem.Pizza.Price,
                     

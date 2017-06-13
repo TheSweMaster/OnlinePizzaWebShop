@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 namespace OnlinePizzaWebApplication.Controllers
 {
     //[Authorize(Roles = "Admin")]
+    [Authorize]
     public class OrdersController : Controller
     {
         private readonly IOrderRepository _orderRepository;
@@ -89,15 +90,6 @@ namespace OnlinePizzaWebApplication.Controllers
             }
         }
 
-
-        //// GET: Orders
-        //public async Task<IActionResult> Index()
-        //{
-        //    var orders = await _context.Orders.ToListAsync();
-
-        //    return View(orders);
-        //}
-
         // GET: Orders/Details/5
         [Authorize]
         public async Task<IActionResult> Details(int id)
@@ -132,7 +124,6 @@ namespace OnlinePizzaWebApplication.Controllers
                 .Where(x => x.OrderId == orders.OrderId);
 
             ViewBag.OrderDetailsList = orderDetailsList;
-            //ViewBag.TotalPrice = orderDetailsList.Sum(x => x.Price * x.Amount);
 
             return View(orders);
         }
@@ -185,27 +176,35 @@ namespace OnlinePizzaWebApplication.Controllers
 
         // GET: Orders/Delete/5
         [Authorize(Roles = "Admin")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var order = await _context.Orders.Include(o => o.User)
+                .SingleOrDefaultAsync(m => m.OrderId == id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return View(order);
         }
 
-        // POST: Orders/Delete/5
+        // POST: OrdersTest/Delete/5
         [Authorize(Roles = "Admin")]
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            try
-            {
-                // TODO: Add delete logic here
+            var order = await _context.Orders.SingleOrDefaultAsync(m => m.OrderId == id);
+            _context.Orders.Remove(order);
+            await _context.SaveChangesAsync();
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction("Index");
         }
+
     }
 }
