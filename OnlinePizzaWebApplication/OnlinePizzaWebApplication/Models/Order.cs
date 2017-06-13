@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -73,5 +74,9 @@ namespace OnlinePizzaWebApplication.Models
         //[ScaffoldColumn(false)]
         //public string OrderStatus { get; set; }
 
+        public string UserId { get; set; }
+
+        public IdentityUser User { get; set; }
+        
     }
 }
