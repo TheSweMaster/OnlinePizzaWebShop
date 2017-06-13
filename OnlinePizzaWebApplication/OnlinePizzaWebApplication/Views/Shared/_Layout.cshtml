@@ -1,4 +1,9 @@
 ﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity.EntityFrameworkCore
+
+@inject SignInManager<IdentityUser> SignInManager
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,7 +39,15 @@
                 <ul class="nav navbar-nav">
                     <li><a asp-controller="Pizzas" asp-action="ListAll">Pizzas</a></li>
                     @await Component.InvokeAsync("CategoryMenu")
-                    <li><a asp-controller="Reviews" asp-action="Index">Reviews</a></li>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <li><a asp-controller="Reviews" asp-action="Index">Reviews</a></li>
+                        <li><a asp-controller="Orders" asp-action="Index">Orders</a></li>
+                    }
+                    else
+                    {
+                        <li><a asp-controller="Reviews" asp-action="ListAll">Reviews</a></li>
+                    }
                     @await Component.InvokeAsync("ShoppingCartSummary")
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")

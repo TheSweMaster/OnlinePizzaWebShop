@@ -7,9 +7,12 @@
 
 <h2>@pageName</h2>
 
-<p>
-    <a asp-action="Create" class="btn btn-success">Create New</a>
-</p>
+@if (Model.Count() <= 0)
+{
+    <h3>You haven't created any @pageName yet...</h3>
+}
+
+
 <table class="table">
     <thead>
         <tr>
@@ -41,7 +44,16 @@
                 @Html.DisplayNameFor(model => model.PhoneNumber)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.OrderTotal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderPlaced)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User)
             </th>
             <th></th>
         </tr>
@@ -78,10 +90,19 @@
                     @Html.DisplayFor(modelItem => item.PhoneNumber)
                 </td>
                 <td>
+                    @item.OrderTotal.ToString("c")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderPlaced)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.Email)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.OrderId">Edit</a> |
+                    @Html.DisplayFor(modelItem => item.User.Email)
+                </td>
+                <td>
+                    @*<a asp-action="Edit" asp-route-id="@item.OrderId">Edit</a> |*@
                     <a asp-action="Details" asp-route-id="@item.OrderId">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.OrderId">Delete</a>
                 </td>

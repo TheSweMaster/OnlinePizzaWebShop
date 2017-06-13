@@ -8,22 +8,26 @@ using OnlinePizzaWebApplication.Repositories;
 using OnlinePizzaWebApplication.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace OnlinePizzaWebApplication.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class OrdersController : Controller
     {
         private readonly IOrderRepository _orderRepository;
         private readonly ShoppingCart _shoppingCart;
         private readonly AppDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
         public OrdersController(IOrderRepository orderRepository, 
-            ShoppingCart shoppingCart, AppDbContext context)
+            ShoppingCart shoppingCart, AppDbContext context, UserManager<IdentityUser> userManager)
         {
             _orderRepository = orderRepository;
             _shoppingCart = shoppingCart;
             _context = context;
+            _userManager = userManager;
         }
 
         [Authorize]
@@ -36,6 +40,9 @@ namespace OnlinePizzaWebApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> Checkout(Order order)
         {
+            var userId = _userManager.GetUserId(HttpContext.User);
+            order.UserId = userId;
+
             var items = await _shoppingCart.GetShoppingCartItemsAsync();
             _shoppingCart.ShoppingCartItems = items;
 
@@ -62,18 +69,37 @@ namespace OnlinePizzaWebApplication.Controllers
             return View();
         }
 
-
-
-
-        // GET: Orders
+        // GET: Reviews
+        [Authorize]
         public async Task<IActionResult> Index()
         {
-            var orders = await _context.Orders.ToListAsync();
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            bool isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
 
-            return View(orders);
+            if (isAdmin)
+            {
+                var allOrders = await _context.Orders.Include(o => o.OrderLines).Include(o => o.User).ToListAsync();
+                return View(allOrders);
+            }
+            else
+            {
+                var orders = await _context.Orders.Include(o => o.OrderLines).Include(o => o.User)
+                    .Where(r => r.User == user).ToListAsync();
+                return View(orders);
+            }
         }
 
+
+        //// GET: Orders
+        //public async Task<IActionResult> Index()
+        //{
+        //    var orders = await _context.Orders.ToListAsync();
+
+        //    return View(orders);
+        //}
+
         // GET: Orders/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int id)
         {
             if (id == 0)
@@ -81,21 +107,34 @@ namespace OnlinePizzaWebApplication.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders.Include(o => o.OrderLines)
+
+            var orders = await _context.Orders.Include(o => o.OrderLines).Include(o => o.User)
                 .SingleOrDefaultAsync(m => m.OrderId == id);
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var userRoles = await _userManager.GetRolesAsync(user);
+            bool isAdmin = userRoles.Any(r => r == "Admin");
 
-            var orderDetailsList = _context.OrderDetails.Include(o => o.Pizza).Include(o => o.Order)
-                .Where(x => x.OrderId == order.OrderId);
-
-            ViewBag.OrderDetailsList = orderDetailsList;
-            ViewBag.TotalPrice = orderDetailsList.Sum(x => x.Price * x.Amount);
-
-            if (order == null)
+            if (orders == null)
             {
                 return NotFound();
             }
 
-            return View(order);
+            if (isAdmin == false)
+            {
+                var userId = _userManager.GetUserId(HttpContext.User);
+                if (orders.UserId != userId)
+                {
+                    return BadRequest("You do not have permissions to view this order.");
+                }
+            }
+
+            var orderDetailsList = _context.OrderDetails.Include(o => o.Pizza).Include(o => o.Order)
+                .Where(x => x.OrderId == orders.OrderId);
+
+            ViewBag.OrderDetailsList = orderDetailsList;
+            //ViewBag.TotalPrice = orderDetailsList.Sum(x => x.Price * x.Amount);
+
+            return View(orders);
         }
 
         // GET: Orders/Create
@@ -145,12 +184,14 @@ namespace OnlinePizzaWebApplication.Controllers
         }
 
         // GET: Orders/Delete/5
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             return View();
         }
 
         // POST: Orders/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id, IFormCollection collection)

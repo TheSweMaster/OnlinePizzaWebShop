@@ -21,8 +21,7 @@ namespace OnlinePizzaWebApplication.Repositories
         public async Task CreateOrderAsync(Order order)
         {
             order.OrderPlaced = DateTime.Now;
-
-            _context.Orders.Add(order);
+            decimal totalPrice = 0M;
 
             var shoppingCartItems = _shoppingCart.ShoppingCartItems;
 
@@ -32,12 +31,17 @@ namespace OnlinePizzaWebApplication.Repositories
                 {
                     Amount = shoppingCartItem.Amount,
                     PizzaId = shoppingCartItem.Pizza.Id,
-                    OrderId = order.OrderId,
-                    Price = shoppingCartItem.Pizza.Price
+                    //OrderId = order.OrderId,
+                    Order = order,
+                    Price = shoppingCartItem.Pizza.Price,
+                    
                 };
-
+                totalPrice += orderDetail.Price * orderDetail.Amount;
                 _context.OrderDetails.Add(orderDetail);
             }
+
+            order.OrderTotal = totalPrice;
+            _context.Orders.Add(order);
 
             await _context.SaveChangesAsync();
         }

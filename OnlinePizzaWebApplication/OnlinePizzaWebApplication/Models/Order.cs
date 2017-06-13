@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -64,10 +65,12 @@ namespace OnlinePizzaWebApplication.Models
 
         [BindNever]
         [ScaffoldColumn(false)]
+        [DisplayName("Order Total")]
         public decimal OrderTotal { get; set; }
 
         [BindNever]
         [ScaffoldColumn(false)]
+        [DisplayName("Order Date")]
         public DateTime OrderPlaced { get; set; }
 
         //[BindNever]

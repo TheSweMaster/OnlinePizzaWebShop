@@ -66,10 +66,22 @@
             @Html.DisplayFor(model => model.PhoneNumber)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.OrderPlaced)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderPlaced)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.Email)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.User)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.User.Email)
         </dd>
         <dt>
             <br />----- Order
@@ -116,12 +128,12 @@
             Total Price
         </dt>
         <dd>
-            @ViewBag.TotalPrice.ToString("c")
+            @Model.OrderTotal.ToString("c")
         </dd>
         
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.OrderId">Edit</a> |
+    @*<a asp-action="Edit" asp-route-id="@Model.OrderId">Edit</a> |*@
     <a asp-action="Index">Back to List</a>
 </div>

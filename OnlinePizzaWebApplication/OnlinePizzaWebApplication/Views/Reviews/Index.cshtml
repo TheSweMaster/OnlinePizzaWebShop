@@ -7,6 +7,11 @@
 
 <h2>@ModelName</h2>
 
+@if (Model.Count() <= 0)
+{
+    <h3>You haven't created any @ModelName yet...</h3>
+}
+
 <p>
     <a asp-action="Create" class="btn btn-success">Create New</a>
 </p>
