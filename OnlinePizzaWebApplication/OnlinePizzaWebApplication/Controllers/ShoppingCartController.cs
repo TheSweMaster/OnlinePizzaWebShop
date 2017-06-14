@@ -59,5 +59,12 @@ namespace OnlinePizzaWebApplication.Controllers
             return RedirectToAction("Index");
         }
 
+        public async Task<IActionResult> ClearCart()
+        {
+            await _shoppingCart.ClearCartAsync();
+
+            return RedirectToAction("Index");
+        }
+
     }
 }

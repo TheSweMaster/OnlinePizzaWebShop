@@ -104,6 +104,53 @@ namespace OnlinePizzaWebApplication.Controllers
         }
 
         // GET: Reviews/Create
+        public IActionResult CreateWithPizza(int? pizzaId)
+        {
+            var review = new Reviews();
+
+            if (pizzaId == null)
+            {
+                return NotFound();
+            }
+
+            var pizza = _context.Pizzas.FirstOrDefault(p => p.Id == pizzaId);
+            
+            if (pizza == null)
+            {
+                return NotFound();
+            }
+
+            review.Pizza = pizza;
+            review.PizzaId = pizza.Id;
+            ViewData["PizzaId"] = new SelectList(_context.Pizzas.Where(p => p.Id == pizzaId), "Id", "Name");
+
+            return View(review);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateWithPizza(int pizzaId, Reviews reviews)
+        {
+            if (pizzaId != reviews.PizzaId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                var userId = _userManager.GetUserId(HttpContext.User);
+                reviews.UserId = userId;
+                reviews.Date = DateTime.Now;
+
+                _context.Add(reviews);
+                await _context.SaveChangesAsync();
+                return Redirect($"PizzaReviews?pizzaId={pizzaId}");
+            }
+            ViewData["PizzaId"] = new SelectList(_context.Pizzas.Where(p => p.Id == pizzaId), "Id", "Name", reviews.PizzaId);
+            return View(reviews);
+        }
+
+        // GET: Reviews/Create
         public IActionResult Create()
         {
             ViewData["PizzaId"] = new SelectList(_context.Pizzas, "Id", "Name");

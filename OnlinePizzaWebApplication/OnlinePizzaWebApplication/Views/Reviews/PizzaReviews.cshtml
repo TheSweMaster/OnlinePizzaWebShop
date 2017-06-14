@@ -11,21 +11,25 @@
        asp-route-id="@ViewBag.PizzaId">Back to  @ViewBag.PizzaName</a>
 </h4>
 
+<p>
+    <a asp-action="CreateWithPizza" asp-route-pizzaId="@ViewBag.PizzaId" class="btn btn-success">Create New Review</a>
+</p>
+
 <table class="table">
     <thead>
         <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Title)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Grade)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Date)
-                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Grade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Pizza)
             </th>
