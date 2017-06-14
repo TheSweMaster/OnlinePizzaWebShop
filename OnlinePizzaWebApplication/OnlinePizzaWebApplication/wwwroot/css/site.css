@@ -1,8 +1,8 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
-    /*background-image: url('../images/bluestripe.jpg');
-    background-repeat: repeat;*/
+    background-image: url('../images/pizzabackgroundfix.jpg');
+    background-repeat: repeat;
     font-family: 'Source Sans Pro', sans-serif;
 }
 
@@ -11,6 +11,7 @@
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
+    background-color: #f2f6f9;
 }
 
 /* Set widths on the form inputs since otherwise they're 100% wide */
@@ -48,9 +49,9 @@ textarea {
     border-radius: 4px;
 }
 
-.thumbnail img {
+/*.thumbnail img {
     width: 100%;
-}
+}*/
 
 .thumbnail {
     padding: 0;
@@ -101,12 +102,13 @@ footer {
     color: #bcedff;
 }
 
-/*.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
-    background-color: lightblue !important;
-    border-color: darkblue !important;
+.slide-image {
+    min-height: 600px;
+    max-height: 600px;
 }
 
-.btn {
-    background-color: darkblue !important;
-    border-color: darkblue !important;
-}*/
+#carousel-example-generic {
+    max-width: 800px;
+    min-width: 600px;
+    margin: 25px;
+}
