@@ -20,7 +20,7 @@
         @foreach (var line in Model.ShoppingCart.ShoppingCartItems)
         {
             <tr>
-                <td class="text-center">@line.Amount</td>
+                <td class="text-center"><a class="btn btn-default" asp-action="RemoveFromShoppingCart" asp-route-pizzaId="@line.Pizza.Id"><b>-</b></a>          <b>@line.Amount</b>          <a class="btn btn-default" asp-action="AddToShoppingCart" asp-route-pizzaId="@line.Pizza.Id"><b>+</b></a></td>
                 <td class="text-left">@line.Pizza.Name</td>
                 <td class="text-right">@line.Pizza.Price.ToString("c")</td>
                 <td class="text-right">
