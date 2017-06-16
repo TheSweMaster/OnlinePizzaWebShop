@@ -13,12 +13,12 @@ namespace OnlinePizzaWebApplication.Controllers
     public class AdminController : Controller
     {
         private readonly AppDbContext _context;
-        private readonly IPizzaRepository _pizzaRepo;
+        private readonly IAdminRepository _adminRepo;
 
-        public AdminController(AppDbContext context, IPizzaRepository pizzaRepo)
+        public AdminController(AppDbContext context, IAdminRepository adminRepo)
         {
             _context = context;
-            _pizzaRepo = pizzaRepo;
+            _adminRepo = adminRepo;
         }
 
         public IActionResult Index()
@@ -27,9 +27,16 @@ namespace OnlinePizzaWebApplication.Controllers
             return View();
         }
 
-        public IActionResult ClearDatabase()
+        public async Task<IActionResult> ClearDatabaseAsync()
         {
-            _pizzaRepo.ClearDatabase();
+            await _adminRepo.ClearDatabaseAsync();
+            return RedirectToAction("Index", "Pizzas", null);
+        }
+
+        public async Task<IActionResult> SeedDatabaseAsync()
+        {
+            await _adminRepo.ClearDatabaseAsync();
+            await _adminRepo.SeedDatabaseAsync();
             return RedirectToAction("Index", "Pizzas", null);
         }
 

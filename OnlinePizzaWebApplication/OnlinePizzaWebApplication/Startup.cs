@@ -43,6 +43,7 @@ namespace OnlinePizzaWebApplication
             services.AddTransient<IPizzaRepository, PizzaRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();
+            services.AddTransient<IAdminRepository, AdminRepository>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped(sp => ShoppingCart.GetCart(sp));
@@ -77,7 +78,7 @@ namespace OnlinePizzaWebApplication
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, AppDbContext context, IServiceProvider serviceProvider)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, AppDbContext context, IServiceProvider serviceProvider, IAdminRepository adminRepo)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -103,7 +104,7 @@ namespace OnlinePizzaWebApplication
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            await DbInitializer.Initialize(context, serviceProvider);
+            await DbInitializer.Initialize(context, serviceProvider, adminRepo);
             await CreateAdminRoleAsync(serviceProvider);
 
         }
@@ -116,28 +117,23 @@ namespace OnlinePizzaWebApplication
             bool roleExists = await _roleManager.RoleExistsAsync("Admin");
             if (!roleExists)
             {
-                // first we create Admin role   
                 var role = new IdentityRole();
                 role.Name = "Admin";
                 await _roleManager.CreateAsync(role);
-
-                //Here we create a Admin super user who will maintain the website                   
 
                 var user = new IdentityUser();
                 user.UserName = "admin";
                 user.Email = "admin@default.com";
 
-                string userPassword = "Password123";
+                string adminPassword = "Password123";
 
-                var userResult = await _userManager.CreateAsync(user, userPassword);
+                var userResult = await _userManager.CreateAsync(user, adminPassword);
 
-                //Add default User to Role Admin    
                 if (userResult.Succeeded)
                 {
                     var result = _userManager.AddToRoleAsync(user, "Admin");
                 }
             }
-            
         }
 
     }

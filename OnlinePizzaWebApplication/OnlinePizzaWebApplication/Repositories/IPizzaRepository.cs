@@ -33,8 +33,5 @@ namespace OnlinePizzaWebApplication.Repositories
         void SaveChanges();
         Task SaveChangesAsync();
 
-        void ClearDatabase();
-        //void SeedDatabase();
-
     }
 }
