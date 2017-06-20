@@ -70,11 +70,12 @@ namespace OnlinePizzaWebApplication.Controllers
             else
             {
                 var pizzaList = await _context.Pizzas.Include(x => x.Category).Include(x => x.Reviews).Include(x => x.PizzaIngredients).OrderBy(x => x.Name)
-                    .Where(p =>
+                     .Where(p =>
                      p.Name.ToLower().Contains(search)
                   || p.Price.ToString("c").ToLower().Contains(search)
                   || p.Category.Name.ToLower().Contains(search)
-                  || p.PizzaIngredients.Select(x => x.Ingredient.Name.ToLower()).Contains(search)).ToListAsync();
+                  || p.PizzaIngredients.Select(x => x.Ingredient.Name.ToLower()).Contains(search))
+                    .ToListAsync();
 
                 if (pizzaList.Any())
                 {

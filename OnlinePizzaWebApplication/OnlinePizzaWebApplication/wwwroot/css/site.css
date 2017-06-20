@@ -112,3 +112,7 @@ footer {
     min-width: 600px;
     margin: 25px;
 }
+
+.review-stars {
+    max-width: 150px;
+}

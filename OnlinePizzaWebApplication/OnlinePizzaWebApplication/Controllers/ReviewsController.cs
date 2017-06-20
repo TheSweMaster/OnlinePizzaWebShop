@@ -123,6 +123,9 @@ namespace OnlinePizzaWebApplication.Controllers
             review.Pizza = pizza;
             review.PizzaId = pizza.Id;
             ViewData["PizzaId"] = new SelectList(_context.Pizzas.Where(p => p.Id == pizzaId), "Id", "Name");
+            var listOfNumbers = new List<int>() { 1, 2, 3, 4, 5 };
+            var listOfGrades = listOfNumbers.Select(x => new { Id = x, Value = x.ToString() });
+            ViewData["Grade"] = new SelectList(listOfGrades, "Id", "Value");
 
             return View(review);
         }
@@ -146,6 +149,9 @@ namespace OnlinePizzaWebApplication.Controllers
                 await _context.SaveChangesAsync();
                 return Redirect($"PizzaReviews?pizzaId={pizzaId}");
             }
+            var listOfNumbers = new List<int>() { 1, 2, 3, 4, 5 };
+            var listOfGrades = listOfNumbers.Select(x => new { Id = x, Value = x.ToString() });
+            ViewData["Grade"] = new SelectList(listOfGrades, "Id", "Value", reviews.Grade);
             ViewData["PizzaId"] = new SelectList(_context.Pizzas.Where(p => p.Id == pizzaId), "Id", "Name", reviews.PizzaId);
             return View(reviews);
         }
@@ -153,6 +159,9 @@ namespace OnlinePizzaWebApplication.Controllers
         // GET: Reviews/Create
         public IActionResult Create()
         {
+            var listOfNumbers = new List<int>() { 1, 2, 3, 4, 5 };
+            var listOfGrades = listOfNumbers.Select(x => new { Id = x, Value = x.ToString() });
+            ViewData["Grade"] = new SelectList(listOfGrades, "Id", "Value");
             ViewData["PizzaId"] = new SelectList(_context.Pizzas, "Id", "Name");
             return View();
         }
@@ -174,7 +183,11 @@ namespace OnlinePizzaWebApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+            var listOfNumbers = new List<int>() { 1, 2, 3, 4, 5 };
+            var listOfGrades = listOfNumbers.Select(x => new { Id = x, Value = x.ToString() });
+            ViewData["Grade"] = new SelectList(listOfGrades, "Id", "Value", reviews.Grade);
             ViewData["PizzaId"] = new SelectList(_context.Pizzas, "Id", "Name", reviews.PizzaId);
+            
             return View(reviews);
         }
 
@@ -204,7 +217,9 @@ namespace OnlinePizzaWebApplication.Controllers
                     return BadRequest("You do not have permissions to edit this review.");
                 }
             }
-
+            var listOfNumbers = new List<int>() { 1, 2, 3, 4, 5 };
+            var listOfGrades = listOfNumbers.Select(x => new { Id = x, Value = x.ToString() });
+            ViewData["Grade"] = new SelectList(listOfGrades, "Id", "Value", reviews.Grade);
             ViewData["PizzaId"] = new SelectList(_context.Pizzas, "Id", "Name", reviews.PizzaId);
             return View(reviews);
         }
@@ -248,6 +263,9 @@ namespace OnlinePizzaWebApplication.Controllers
                 }
                 return RedirectToAction("Index");
             }
+            var listOfNumbers = new List<int>() { 1, 2, 3, 4, 5 };
+            var listOfGrades = listOfNumbers.Select(x => new { Id = x, Value = x.ToString() });
+            ViewData["Grade"] = new SelectList(listOfGrades, "Id", "Value", reviews.Grade);
             ViewData["PizzaId"] = new SelectList(_context.Pizzas, "Id", "Name", reviews.PizzaId);
             return View(reviews);
         }
@@ -299,5 +317,6 @@ namespace OnlinePizzaWebApplication.Controllers
         {
             return _context.Reviews.Any(e => e.Id == id);
         }
+
     }
 }

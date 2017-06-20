@@ -13,6 +13,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="wwwroot\images\0stars.png" />
+    <Content Include="wwwroot\images\1.5stars.png" />
+    <Content Include="wwwroot\images\1star.png" />
+    <Content Include="wwwroot\images\2.5stars.png" />
+    <Content Include="wwwroot\images\2stars.png" />
+    <Content Include="wwwroot\images\3.5stars.png" />
+    <Content Include="wwwroot\images\3stars.png" />
+    <Content Include="wwwroot\images\4.5stars.png" />
+    <Content Include="wwwroot\images\4stars.png" />
+    <Content Include="wwwroot\images\5stars.png" />
     <Content Include="wwwroot\images\bluestripe.jpg" />
     <Content Include="wwwroot\images\pizzabackgroundfix.jpg" />
   </ItemGroup>

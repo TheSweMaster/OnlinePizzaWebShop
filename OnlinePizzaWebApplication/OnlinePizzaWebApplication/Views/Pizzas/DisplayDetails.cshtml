@@ -38,14 +38,55 @@
             }
         </p>
         <p>
-            @if (ViewBag.AverageReviewScore > 0)
+        @if (ViewBag.AverageReviewScore > 0)
         {
-                <h4>Average Review Score (1-5): <b> @ViewBag.AverageReviewScore </b></h4>
-            }
-            else
-            {
-                <h4>No Reviews was found. </h4>
-            }
+            <h4>Average Review Score: <b> @ViewBag.AverageReviewScore </b></h4>
+        }
+        else
+        {
+            <h4>No Reviews was found. </h4>
+        }
+
+        @if (ViewBag.AverageReviewScore <= 0 || ViewBag.AverageReviewScore > 5)
+        {
+            <img class="review-stars" src="~/images/0stars.png" alt="No Reviews was found." />
+        }
+        else if (ViewBag.AverageReviewScore > 4.5)
+        {
+            <img class="review-stars" src="~/images/5stars.png" alt="5 stars picture." />
+        }
+        else if (ViewBag.AverageReviewScore > 4.0)
+        {
+            <img class="review-stars" src="~/images/4.5stars.png" alt="4.5 stars picture." />
+        }
+        else if (ViewBag.AverageReviewScore > 3.5)
+        {
+            <img class="review-stars" src="~/images/4stars.png" alt="4 stars picture." />
+        }
+        else if (ViewBag.AverageReviewScore > 3.0)
+        {
+            <img class="review-stars" src="~/images/3.5stars.png" alt="3.5 stars picture." />
+        }
+        else if (ViewBag.AverageReviewScore > 2.5)
+        {
+            <img class="review-stars" src="~/images/3stars.png" alt="3 stars picture." />
+        }
+        else if (ViewBag.AverageReviewScore > 2.0)
+        {
+            <img class="review-stars" src="~/images/2.5stars.png" alt="2.5 stars picture." />
+        }
+        else if (ViewBag.AverageReviewScore > 1.5)
+        {
+            <img class="review-stars" src="~/images/2stars.png" alt="2 stars picture." />
+        }
+        else if (ViewBag.AverageReviewScore > 1.0)
+        {
+            <img class="review-stars" src="~/images/1.5stars.png" alt="1.5 stars picture." />
+        }
+        else
+        {
+            <img class="review-stars" src="~/images/1star.png" alt="1 star picture." />
+        }
 
         </p>
         <p>
