@@ -36,9 +36,11 @@ namespace OnlinePizzaWebApplication.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ListAll()
         {
-            var model = new SearchPizzasViewModel();
-            model.PizzaList = await _pizzaRepo.GetAllIncludedAsync();
-            model.SearchText = null;
+            var model = new SearchPizzasViewModel()
+            {
+                PizzaList = await _pizzaRepo.GetAllIncludedAsync(),
+                SearchText = null
+            };
 
             return View(model);
         }
@@ -179,15 +181,11 @@ namespace OnlinePizzaWebApplication.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> SearchPizzas()
         {
-            var model = new SearchPizzasViewModel();
-            model.PizzaList = await _pizzaRepo.GetAllIncludedAsync();
-            model.SearchText = null;
-
-            //var result = pizzas.OrderBy(x => x.Name).Where(p =>
-            //     p.Name.Contains(searchText)
-            //  || p.Price.ToString("c").Contains(searchText)
-            //  || p.Category.Name.Contains(searchText)
-            //  || p.PizzaIngredients.Select(x => x.Ingredient.Name).Contains(searchText));
+            var model = new SearchPizzasViewModel()
+            {
+                PizzaList = await _pizzaRepo.GetAllIncludedAsync(),
+                SearchText = null
+            };
 
             return View(model);
         }

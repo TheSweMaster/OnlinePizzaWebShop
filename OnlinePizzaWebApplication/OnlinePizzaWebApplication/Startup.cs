@@ -117,16 +117,19 @@ namespace OnlinePizzaWebApplication
             bool roleExists = await _roleManager.RoleExistsAsync("Admin");
             if (!roleExists)
             {
-                var role = new IdentityRole();
-                role.Name = "Admin";
+                var role = new IdentityRole()
+                {
+                    Name = "Admin"
+                };
                 await _roleManager.CreateAsync(role);
 
-                var user = new IdentityUser();
-                user.UserName = "admin";
-                user.Email = "admin@default.com";
+                var user = new IdentityUser()
+                {
+                    UserName = "admin",
+                    Email = "admin@default.com"
+                };
 
                 string adminPassword = "Password123";
-
                 var userResult = await _userManager.CreateAsync(user, adminPassword);
 
                 if (userResult.Succeeded)

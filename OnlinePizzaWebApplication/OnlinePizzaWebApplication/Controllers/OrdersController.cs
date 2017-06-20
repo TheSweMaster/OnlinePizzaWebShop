@@ -99,7 +99,6 @@ namespace OnlinePizzaWebApplication.Controllers
                 return NotFound();
             }
 
-
             var orders = await _context.Orders.Include(o => o.OrderLines).Include(o => o.User)
                 .SingleOrDefaultAsync(m => m.OrderId == id);
             var user = await _userManager.GetUserAsync(HttpContext.User);
