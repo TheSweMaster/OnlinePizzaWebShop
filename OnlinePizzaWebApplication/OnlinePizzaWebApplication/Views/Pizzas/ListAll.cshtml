@@ -12,8 +12,9 @@
         <div class="form-group">
             <label asp-for="SearchText" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="SearchText" class="form-control" />
+                <input asp-for="SearchText" class="form-control" type="text" id="SearchFieldId" oninput="listSearchExamplesScript()" />
                 <span asp-validation-for="SearchText" class="text-danger"></span>
+                
             </div>
         </div>
         <div class="form-group">
@@ -23,6 +24,8 @@
         </div>
     </div>
 </form>
+
+<div id="SuggestOutput"></div>
 
 @if (Model.SearchText != null)
 {
@@ -34,9 +37,11 @@ else
 }
 <hr />
 
-@foreach (var pizza in Model.PizzaList)
-{
-    @Html.Partial("PizzaSummary", pizza)
-}
+<div id="PizzaSummaryId">
+    @foreach (var pizza in Model.PizzaList)
+    {
+        @Html.Partial("PizzaSummary", pizza)
+    }
+</div>
 <br />
 

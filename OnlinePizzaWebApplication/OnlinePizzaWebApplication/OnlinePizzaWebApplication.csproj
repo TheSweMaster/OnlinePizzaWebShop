@@ -11,21 +11,6 @@
   <ItemGroup>
     <None Remove="Properties\PublishProfiles\OnlinePizzaWebApplication2 - Web Deploy.pubxml" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="wwwroot\images\0stars.png" />
-    <Content Include="wwwroot\images\1.5stars.png" />
-    <Content Include="wwwroot\images\1star.png" />
-    <Content Include="wwwroot\images\2.5stars.png" />
-    <Content Include="wwwroot\images\2stars.png" />
-    <Content Include="wwwroot\images\3.5stars.png" />
-    <Content Include="wwwroot\images\3stars.png" />
-    <Content Include="wwwroot\images\4.5stars.png" />
-    <Content Include="wwwroot\images\4stars.png" />
-    <Content Include="wwwroot\images\5stars.png" />
-    <Content Include="wwwroot\images\bluestripe.jpg" />
-    <Content Include="wwwroot\images\pizzabackgroundfix.jpg" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
@@ -40,6 +25,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.1.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="1.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />

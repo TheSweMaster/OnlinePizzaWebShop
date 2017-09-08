@@ -9,6 +9,7 @@ using OnlinePizzaWebApplication.Models;
 using OnlinePizzaWebApplication.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using OnlinePizzaWebApplication.ViewModels;
+using Newtonsoft.Json;
 
 namespace OnlinePizzaWebApplication.Controllers
 {
@@ -45,6 +46,27 @@ namespace OnlinePizzaWebApplication.Controllers
             return View(model);
         }
 
+        private async Task<List<Pizzas>> GetPizzaSearchList(string userInput)
+        {
+            userInput = userInput.ToLower().Trim();
+
+            var result = _context.Pizzas.Include(p => p.Category)
+                .Where(p => p
+                    .Name.ToLower().Contains(userInput))
+                    .Select(p => p);
+
+            return await result.ToListAsync();
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> AjaxSearchList(string searchString)
+        {
+            var pizzaList = await GetPizzaSearchList(searchString);
+            
+            return PartialView(pizzaList);
+        }
+
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -63,9 +85,9 @@ namespace OnlinePizzaWebApplication.Controllers
                 model.PizzaList = pizzas;
                 return View(model);
             }
-            var search = input.ToLower();
+            var searchString = input.ToLower();
 
-            if (string.IsNullOrEmpty(search))
+            if (string.IsNullOrEmpty(searchString))
             {
                 model.PizzaList = pizzas;
             }
@@ -73,10 +95,10 @@ namespace OnlinePizzaWebApplication.Controllers
             {
                 var pizzaList = await _context.Pizzas.Include(x => x.Category).Include(x => x.Reviews).Include(x => x.PizzaIngredients).OrderBy(x => x.Name)
                      .Where(p =>
-                     p.Name.ToLower().Contains(search)
-                  || p.Price.ToString("c").ToLower().Contains(search)
-                  || p.Category.Name.ToLower().Contains(search)
-                  || p.PizzaIngredients.Select(x => x.Ingredient.Name.ToLower()).Contains(search))
+                     p.Name.ToLower().Contains(searchString)
+                  || p.Price.ToString("c").ToLower().Contains(searchString)
+                  || p.Category.Name.ToLower().Contains(searchString)
+                  || p.PizzaIngredients.Select(x => x.Ingredient.Name.ToLower()).Contains(searchString))
                     .ToListAsync();
 
                 if (pizzaList.Any())
