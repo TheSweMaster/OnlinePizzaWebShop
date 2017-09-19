@@ -59,6 +59,72 @@ namespace OnlinePizzaWebApplication.Controllers
             return View(reviews);
         }
 
+        private async Task<List<Reviews>> SortReviews(string sortBy, bool isDescending)
+        {
+            var reviewsList = _context.Reviews.Include(r => r.Pizza).Include(r => r.User);
+            IQueryable<Reviews> result;
+
+            if (sortBy == null || sortBy == "")
+            {
+                result = reviewsList;
+            }
+
+            if (isDescending == false)
+            {
+                switch (sortBy.ToLower())
+                {
+                    case "date":
+                        result = reviewsList.OrderBy(x => x.Date);
+                        break;
+                    case "grade":
+                        result = reviewsList.OrderBy(x => x.Grade);
+                        break;
+                    case "title":
+                        result = reviewsList.OrderBy(x => x.Title);
+                        break;
+                    case "pizza name":
+                        result = reviewsList.OrderBy(x => x.Pizza.Name);
+                        break;
+                    default:
+                        result = reviewsList.OrderBy(x => x.Pizza.Id);
+                        break;
+                }
+            }
+            else
+            {
+                switch (sortBy.ToLower())
+                {
+                    case "date":
+                        result = reviewsList.OrderByDescending(x => x.Date);
+                        break;
+                    case "grade":
+                        result = reviewsList.OrderByDescending(x => x.Grade);
+                        break;
+                    case "title":
+                        result = reviewsList.OrderByDescending(x => x.Title);
+                        break;
+                    case "pizza name":
+                        result = reviewsList.OrderByDescending(x => x.Pizza.Name);
+                        break;
+                    default:
+                        result = reviewsList.OrderByDescending(x => x.Pizza.Id);
+                        break;
+                }
+            }
+
+            //Partial view?
+            return await result.ToListAsync();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> AjaxListReviews(string sortBy, bool isDescending)
+        {
+            var listOfReviews = await SortReviews(sortBy, !isDescending);
+
+            return PartialView(listOfReviews);
+        }
+
         // GET: Reviews
         [AllowAnonymous]
         public async Task<IActionResult> PizzaReviews(int? pizzaId)

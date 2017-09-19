@@ -19,6 +19,7 @@ function listSearchExamplesScript() {
         });
 }
 
+//### Just test examples below ###
 $.ajax({
     type: 'POST',
     url: 'PageName.aspx/GetDate',

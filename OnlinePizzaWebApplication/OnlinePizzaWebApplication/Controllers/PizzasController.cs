@@ -53,7 +53,7 @@ namespace OnlinePizzaWebApplication.Controllers
             var result = _context.Pizzas.Include(p => p.Category)
                 .Where(p => p
                     .Name.ToLower().Contains(userInput))
-                    .Select(p => p);
+                    .Select(p => p).OrderBy(p => p.Name);
 
             return await result.ToListAsync();
         }

@@ -5,57 +5,88 @@
     ViewData["Title"] = ModelName;
 }
 
-<h2>@ModelName</h2>
+<h2>All Reviews</h2>
+<h4 id="currentlySortedBy">Sorted by: </h4>
 
-<table class="table">
-    <thead>
-        <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Title)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Grade)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Date)
-                </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Pizza)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User.Email)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Grade)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Pizza.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Email)
-            </td>
-            <td>
-                <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">Details</a>
-            </td>
-        </tr>
+<div>
+    <b>Sort/Order by: </b>
+    <select id="SelectOptionInput" onchange="ListSortedReviewsScript()">
+        <option value="Date">Date</option>
+        <option value="Grade">Grade</option>
+        <option value="Title">Title</option>
+        <option value="Pizza Name">Pizza Name</option>
+    </select>
+</div>
+<br />
+
+<div>
+    <b>Descending:</b>
+    <input id="DescendingInput" type="checkbox" onchange="ListSortedReviewsScript()" />
+</div>
+<br />
+
+<div id="outputResult">
+
+</div>
+
+<div id="defaultResult">
+    @Html.Partial("ListAllReviewsPartial", Model)
+</div>
+
+@section Scripts
+{
+    <script src="~/js/Reviews.js"></script>
 }
-    </tbody>
-</table>
+
+@*<table class="table">
+        <thead>
+            <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Grade)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Date)
+                    </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Pizza)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.User.Email)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Grade)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Pizza.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.Email)
+                </td>
+                <td>
+                    <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">Details</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>*@
