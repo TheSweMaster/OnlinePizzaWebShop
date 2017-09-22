@@ -120,7 +120,7 @@ namespace OnlinePizzaWebApplication.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> AjaxListReviews(string sortBy, bool isDescending)
         {
-            var listOfReviews = await SortReviews(sortBy, !isDescending);
+            var listOfReviews = await SortReviews(sortBy, isDescending);
 
             return PartialView(listOfReviews);
         }
