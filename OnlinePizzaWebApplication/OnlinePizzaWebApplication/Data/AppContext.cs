@@ -5,8 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using OnlinePizzaWebApplication.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
-namespace OnlinePizzaWebApplication.Models
+namespace OnlinePizzaWebApplication.Data
 {
     public class AppDbContext : IdentityDbContext<IdentityUser>
     {

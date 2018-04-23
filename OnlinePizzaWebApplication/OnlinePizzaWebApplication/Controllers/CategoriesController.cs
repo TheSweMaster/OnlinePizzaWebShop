@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlinePizzaWebApplication.Models;
 using OnlinePizzaWebApplication.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using OnlinePizzaWebApplication.Data;
 
 namespace OnlinePizzaWebApplication.Controllers
 {

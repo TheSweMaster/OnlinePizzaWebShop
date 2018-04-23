@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace OnlinePizzaWebApplication.Repositories
-
 {
     public interface IPizzaRepository
     {

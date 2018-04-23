@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using OnlinePizzaWebApplication.Data;
 using OnlinePizzaWebApplication.Models;
 
 namespace OnlinePizzaWebApplication.Migrations

@@ -19,22 +19,18 @@ namespace OnlinePizzaWebApplication
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<AppDbContext>(options => 
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                     .AddEntityFrameworkStores<AppDbContext>()
@@ -61,32 +57,45 @@ namespace OnlinePizzaWebApplication
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = true;
                 options.Password.RequireLowercase = false;
+                options.Password.RequiredUniqueChars = 6;
 
                 // Lockout settings
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
                 options.Lockout.MaxFailedAccessAttempts = 10;
-
-                // Cookie settings
-                options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(150);
-                options.Cookies.ApplicationCookie.LoginPath = "/Account/LogIn";
-                options.Cookies.ApplicationCookie.LogoutPath = "/Account/LogOut";
+                options.Lockout.AllowedForNewUsers = true;
 
                 // User settings
                 options.User.RequireUniqueEmail = true;
             });
 
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                // If the LoginPath isn't set, ASP.NET Core defaults 
+                // the path to /Account/Login.
+                options.LoginPath = "/Account/Login";
+                options.LogoutPath = "/Account/LogOut";
+                // If the AccessDeniedPath isn't set, ASP.NET Core defaults 
+                // the path to /Account/AccessDenied.
+                options.AccessDeniedPath = "/Account/AccessDenied";
+                options.SlidingExpiration = true;
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, AppDbContext context, IServiceProvider serviceProvider, IAdminRepository adminRepo)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
+                app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -95,7 +104,7 @@ namespace OnlinePizzaWebApplication
 
             app.UseStaticFiles();
             app.UseSession();
-            app.UseIdentity();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
@@ -104,39 +113,6 @@ namespace OnlinePizzaWebApplication
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            await DbInitializer.Initialize(context, serviceProvider, adminRepo);
-            await CreateAdminRoleAsync(serviceProvider);
-
-        }
-
-        private async Task CreateAdminRoleAsync(IServiceProvider serviceProvider)
-        {
-            var _roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var _userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
-
-            bool roleExists = await _roleManager.RoleExistsAsync("Admin");
-            if (!roleExists)
-            {
-                var role = new IdentityRole()
-                {
-                    Name = "Admin"
-                };
-                await _roleManager.CreateAsync(role);
-
-                var user = new IdentityUser()
-                {
-                    UserName = "admin",
-                    Email = "admin@default.com"
-                };
-
-                string adminPassword = "Password123";
-                var userResult = await _userManager.CreateAsync(user, adminPassword);
-
-                if (userResult.Succeeded)
-                {
-                    var result = _userManager.AddToRoleAsync(user, "Admin");
-                }
-            }
         }
 
     }

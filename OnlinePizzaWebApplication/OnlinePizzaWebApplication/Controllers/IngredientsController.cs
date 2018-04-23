@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlinePizzaWebApplication.Models;
 using Microsoft.AspNetCore.Authorization;
+using OnlinePizzaWebApplication.Data;
 
 namespace OnlinePizzaWebApplication.Controllers
 {

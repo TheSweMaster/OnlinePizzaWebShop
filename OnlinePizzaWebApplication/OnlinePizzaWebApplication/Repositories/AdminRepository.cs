@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using OnlinePizzaWebApplication.Data;
 using OnlinePizzaWebApplication.Models;
 using System;
 using System.Collections.Generic;
@@ -51,11 +52,11 @@ namespace OnlinePizzaWebApplication.Repositories
                 piz1, piz2, piz3, piz4, piz5, piz6, piz7, piz8, piz9, piz10
             };
 
-            var user1 = new IdentityUser { UserName = "user1@gmail.com", Email = "user1@gmail.com" };
-            var user2 = new IdentityUser { UserName = "user2@gmail.com", Email = "user2@gmail.com" };
-            var user3 = new IdentityUser { UserName = "user3@gmail.com", Email = "user3@gmail.com" };
-            var user4 = new IdentityUser { UserName = "user4@gmail.com", Email = "user4@gmail.com" };
-            var user5 = new IdentityUser { UserName = "user5@gmail.com", Email = "user5@gmail.com" };
+            var user1 = new IdentityUser { UserName = "user1@gamil.com", Email = "user1@gamil.com" };
+            var user2 = new IdentityUser { UserName = "user2@gamil.com", Email = "user2@gamil.com" };
+            var user3 = new IdentityUser { UserName = "user3@gamil.com", Email = "user3@gamil.com" };
+            var user4 = new IdentityUser { UserName = "user4@gamil.com", Email = "user4@gamil.com" };
+            var user5 = new IdentityUser { UserName = "user5@gamil.com", Email = "user5@gamil.com" };
 
             string userPassword = "Password123";
 
@@ -66,7 +67,8 @@ namespace OnlinePizzaWebApplication.Repositories
 
             foreach (var user in users)
             {
-                await _userManager.CreateAsync(user, userPassword);
+                //Bug with Core 2.1/2.2: Throws Disposed Exception after multiple calls.
+                var result1 = _userManager.CreateAsync(user, userPassword).Result;
             }
 
             var revs = new List<Reviews>()
@@ -204,8 +206,9 @@ namespace OnlinePizzaWebApplication.Repositories
             _context.OrderDetails.AddRange(orderLines);
             _context.Ingredients.AddRange(ings);
             _context.PizzaIngredients.AddRange(pizIngs);
-            
-            await _context.SaveChangesAsync();
+
+            var result2 = _context.SaveChangesAsync().Result;
+            await Task.CompletedTask;
         }
 
         public async Task ClearDatabaseAsync()
@@ -222,13 +225,19 @@ namespace OnlinePizzaWebApplication.Repositories
             var shoppingCartItems = _context.ShoppingCartItems.ToList();
             _context.ShoppingCartItems.RemoveRange(shoppingCartItems);
 
-            var users = _context.Users.Include(x => x.Roles).ToList();
+            var users = _context.Users.ToList();
+            var userRoles = _context.UserRoles.ToList();
+
             foreach (var user in users)
             {
-                if (!user.Roles.Any())
+                if (!userRoles.Any(r => r.UserId == user.Id))
                 {
                     _context.Users.Remove(user);
                 }
+                //if (!user.Roles.Any())
+                //{
+                //    _context.Users.Remove(user);
+                //}
             }
 
             var orderDetails = _context.OrderDetails.ToList();
@@ -243,7 +252,8 @@ namespace OnlinePizzaWebApplication.Repositories
             var categories = _context.Categories.ToList();
             _context.Categories.RemoveRange(categories);
 
-            await _context.SaveChangesAsync();
+            var result = _context.SaveChangesAsync().Result;
+            await Task.CompletedTask;
         }
 
     }

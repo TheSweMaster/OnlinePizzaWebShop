@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using OnlinePizzaWebApplication.Repositories;
 using OnlinePizzaWebApplication.Models;
+using OnlinePizzaWebApplication.Data;
 
 namespace OnlinePizzaWebApplication.Controllers
 {
@@ -23,7 +24,6 @@ namespace OnlinePizzaWebApplication.Controllers
 
         public IActionResult Index()
         {
-            //string text = "Hello Admin";
             return View();
         }
 
