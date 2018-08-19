@@ -1,6 +1,4 @@
-﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
-@using Microsoft.AspNetCore.Identity
-@using Microsoft.AspNetCore.Identity.EntityFrameworkCore
+﻿@using Microsoft.AspNetCore.Identity
 
 @inject SignInManager<IdentityUser> SignInManager
 
@@ -21,7 +19,6 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
-    @Html.Raw(JavaScriptSnippet.FullScript)
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">

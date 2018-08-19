@@ -37,6 +37,7 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="Views\Account\" />
     <Folder Include="Views\OrderDetails\" />
     <Folder Include="Views\Shared\Components\ShoppingCartSummary\" />

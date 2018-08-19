@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using OnlinePizzaWebApplication.Data;
 using OnlinePizzaWebApplication.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace OnlinePizzaWebApplication.Repositories
 {
@@ -22,7 +19,7 @@ namespace OnlinePizzaWebApplication.Repositories
             _serviceProvider = serviceProvider;
         }
 
-        public async Task SeedDatabaseAsync()
+        public void SeedDatabase()
         {
             var _roleManager = _serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var _userManager = _serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
@@ -52,11 +49,11 @@ namespace OnlinePizzaWebApplication.Repositories
                 piz1, piz2, piz3, piz4, piz5, piz6, piz7, piz8, piz9, piz10
             };
 
-            var user1 = new IdentityUser { UserName = "user1@gamil.com", Email = "user1@gamil.com" };
-            var user2 = new IdentityUser { UserName = "user2@gamil.com", Email = "user2@gamil.com" };
-            var user3 = new IdentityUser { UserName = "user3@gamil.com", Email = "user3@gamil.com" };
-            var user4 = new IdentityUser { UserName = "user4@gamil.com", Email = "user4@gamil.com" };
-            var user5 = new IdentityUser { UserName = "user5@gamil.com", Email = "user5@gamil.com" };
+            var user1 = new IdentityUser { UserName = "user1@gmail.com", Email = "user1@gmail.com" };
+            var user2 = new IdentityUser { UserName = "user2@gmail.com", Email = "user2@gmail.com" };
+            var user3 = new IdentityUser { UserName = "user3@gmail.com", Email = "user3@gmail.com" };
+            var user4 = new IdentityUser { UserName = "user4@gmail.com", Email = "user4@gmail.com" };
+            var user5 = new IdentityUser { UserName = "user5@gmail.com", Email = "user5@gmail.com" };
 
             string userPassword = "Password123";
 
@@ -67,8 +64,7 @@ namespace OnlinePizzaWebApplication.Repositories
 
             foreach (var user in users)
             {
-                //Bug with Core 2.1/2.2: Throws Disposed Exception after multiple calls.
-                var result1 = _userManager.CreateAsync(user, userPassword).Result;
+                _userManager.CreateAsync(user, userPassword).Wait();
             }
 
             var revs = new List<Reviews>()
@@ -207,11 +203,10 @@ namespace OnlinePizzaWebApplication.Repositories
             _context.Ingredients.AddRange(ings);
             _context.PizzaIngredients.AddRange(pizIngs);
 
-            var result2 = _context.SaveChangesAsync().Result;
-            await Task.CompletedTask;
+            _context.SaveChanges();
         }
 
-        public async Task ClearDatabaseAsync()
+        public void ClearDatabase()
         {
             var pizzaIngredients = _context.PizzaIngredients.ToList();
             _context.PizzaIngredients.RemoveRange(pizzaIngredients);
@@ -234,10 +229,6 @@ namespace OnlinePizzaWebApplication.Repositories
                 {
                     _context.Users.Remove(user);
                 }
-                //if (!user.Roles.Any())
-                //{
-                //    _context.Users.Remove(user);
-                //}
             }
 
             var orderDetails = _context.OrderDetails.ToList();
@@ -252,8 +243,7 @@ namespace OnlinePizzaWebApplication.Repositories
             var categories = _context.Categories.ToList();
             _context.Categories.RemoveRange(categories);
 
-            var result = _context.SaveChangesAsync().Result;
-            await Task.CompletedTask;
+            _context.SaveChanges();
         }
 
     }

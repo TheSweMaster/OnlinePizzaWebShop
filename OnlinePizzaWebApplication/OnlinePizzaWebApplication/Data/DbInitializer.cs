@@ -1,63 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using OnlinePizzaWebApplication.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using OnlinePizzaWebApplication.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace OnlinePizzaWebApplication.Data
 {
     public class DbInitializer
     {
-        public static async void Initialize(AppDbContext context, IServiceProvider service)
+        public static void Initialize(AppDbContext context, IServiceProvider service)
         {
             context.Database.EnsureCreated();
 
             var roleManager = service.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = service.GetRequiredService<UserManager<IdentityUser>>();
 
-            if (await context.Pizzas.AnyAsync())
+            if (context.Pizzas.Any())
             {
                 return;
             }
 
-            ClearDatabaseAsync(context);
-            await CreateAdminRoleAsync(context, roleManager, userManager);
-            SeedDatabaseAsync(context, roleManager, userManager);
+            ClearDatabase(context);
+            CreateAdminRole(context, roleManager, userManager);
+            SeedDatabase(context, roleManager, userManager);
         }
 
-        private static async Task CreateAdminRoleAsync(AppDbContext context, RoleManager<IdentityRole> _roleManager, UserManager<IdentityUser> _userManager)
+        private static void CreateAdminRole(AppDbContext context, RoleManager<IdentityRole> _roleManager, UserManager<IdentityUser> _userManager)
         {
-            bool roleExists = await _roleManager.RoleExistsAsync("Admin");
-            if (!roleExists)
+            bool roleExists = _roleManager.RoleExistsAsync("Admin").Result;
+            if (roleExists)
             {
-                var role = new IdentityRole()
-                {
-                    Name = "Admin"
-                };
-                var result1 = _roleManager.CreateAsync(role).Result;
+                return;
+            }
+            
+            var role = new IdentityRole()
+            {
+                Name = "Admin"
+            };
+            _roleManager.CreateAsync(role).Wait();
 
-                var user = new IdentityUser()
-                {
-                    UserName = "admin",
-                    Email = "admin@default.com"
-                };
+            var user = new IdentityUser()
+            {
+                UserName = "admin",
+                Email = "admin@default.com"
+            };
 
-                string adminPassword = "Password123";
-                var userResult =  _userManager.CreateAsync(user, adminPassword).Result;
+            string adminPassword = "Password123";
+            var userResult =  _userManager.CreateAsync(user, adminPassword).Result;
 
-                if (userResult.Succeeded)
-                {
-                    var result2 = _userManager.AddToRoleAsync(user, "Admin");
-                }
+            if (userResult.Succeeded)
+            {
+                _userManager.AddToRoleAsync(user, "Admin").Wait();
             }
         }
 
-        private static void SeedDatabaseAsync(AppDbContext _context, RoleManager<IdentityRole> _roleManager, UserManager<IdentityUser> _userManager)
+        private static void SeedDatabase(AppDbContext _context, RoleManager<IdentityRole> _roleManager, UserManager<IdentityUser> _userManager)
         {
             var cat1 = new Categories { Name = "Standard", Description = "The Bakery's Standard pizzas all year around." };
             var cat2 = new Categories { Name = "Spcialities", Description = "The Bakery's Speciality pizzas only for a limited time." };
@@ -84,11 +82,11 @@ namespace OnlinePizzaWebApplication.Data
                 piz1, piz2, piz3, piz4, piz5, piz6, piz7, piz8, piz9, piz10
             };
 
-            var user1 = new IdentityUser { UserName = "user1@gamil.com", Email = "user1@gamil.com" };
-            var user2 = new IdentityUser { UserName = "user2@gamil.com", Email = "user2@gamil.com" };
-            var user3 = new IdentityUser { UserName = "user3@gamil.com", Email = "user3@gamil.com" };
-            var user4 = new IdentityUser { UserName = "user4@gamil.com", Email = "user4@gamil.com" };
-            var user5 = new IdentityUser { UserName = "user5@gamil.com", Email = "user5@gamil.com" };
+            var user1 = new IdentityUser { UserName = "user1@gmail.com", Email = "user1@gmail.com" };
+            var user2 = new IdentityUser { UserName = "user2@gmail.com", Email = "user2@gmail.com" };
+            var user3 = new IdentityUser { UserName = "user3@gmail.com", Email = "user3@gmail.com" };
+            var user4 = new IdentityUser { UserName = "user4@gmail.com", Email = "user4@gmail.com" };
+            var user5 = new IdentityUser { UserName = "user5@gmail.com", Email = "user5@gmail.com" };
 
             string userPassword = "Password123";
 
@@ -99,9 +97,7 @@ namespace OnlinePizzaWebApplication.Data
 
             foreach (var user in users)
             {
-                //Bug with Core 2.1/2.2: Throws Disposed Exception after multiple calls. Temp fix Service as Singleton?
-                //await _userManager.CreateAsync(user, userPassword);
-                var result1 = _userManager.CreateAsync(user, userPassword).Result;
+                _userManager.CreateAsync(user, userPassword).Wait();
             }
 
             var revs = new List<Reviews>()
@@ -243,7 +239,7 @@ namespace OnlinePizzaWebApplication.Data
             _context.SaveChanges();
         }
 
-        private static void ClearDatabaseAsync(AppDbContext _context)
+        private static void ClearDatabase(AppDbContext _context)
         {
             var pizzaIngredients = _context.PizzaIngredients.ToList();
             _context.PizzaIngredients.RemoveRange(pizzaIngredients);

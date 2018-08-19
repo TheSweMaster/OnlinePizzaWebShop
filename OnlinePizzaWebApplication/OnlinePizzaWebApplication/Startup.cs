@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +8,6 @@ using OnlinePizzaWebApplication.Models;
 using Microsoft.EntityFrameworkCore;
 using OnlinePizzaWebApplication.Data;
 using OnlinePizzaWebApplication.Repositories;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 
@@ -114,6 +110,5 @@ namespace OnlinePizzaWebApplication
             });
 
         }
-
     }
 }
