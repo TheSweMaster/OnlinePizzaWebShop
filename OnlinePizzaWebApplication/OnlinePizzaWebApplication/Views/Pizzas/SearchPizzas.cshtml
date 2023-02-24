@@ -29,7 +29,7 @@
 
 @foreach (var pizza in Model.PizzaList)
 {
-    @Html.Partial("PizzaSummary", pizza)
+    @await Html.PartialAsync("PizzaSummary", pizza)
 }
 <br />
 
