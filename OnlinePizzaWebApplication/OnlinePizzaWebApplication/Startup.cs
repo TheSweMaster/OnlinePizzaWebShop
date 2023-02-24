@@ -31,6 +31,8 @@ namespace OnlinePizzaWebApplication
             services.AddIdentity<IdentityUser, IdentityRole>()
                     .AddEntityFrameworkStores<AppDbContext>()
                     .AddDefaultTokenProviders();
+            
+            services.AddControllersWithViews();
 
             services.AddTransient<IPizzaRepository, PizzaRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
@@ -40,10 +42,15 @@ namespace OnlinePizzaWebApplication
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped(sp => ShoppingCart.GetCart(sp));
 
-            services.AddMvc();
-
             services.AddMemoryCache();
-            services.AddSession();
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = ".OnlinePizzaWebApplication.Session";
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.IsEssential = true;
+                options.Cookie.HttpOnly = true;
+            });
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -67,6 +74,8 @@ namespace OnlinePizzaWebApplication
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings
+                options.Cookie.Name = ".OnlinePizzaWebApplication";
+                options.Cookie.IsEssential = true;
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
                 // If the LoginPath isn't set, ASP.NET Core defaults 
@@ -92,18 +101,23 @@ namespace OnlinePizzaWebApplication
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
             }
 
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
+            
             app.UseRouting();
-
             app.UseSession();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapRazorPages();
+                endpoints.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

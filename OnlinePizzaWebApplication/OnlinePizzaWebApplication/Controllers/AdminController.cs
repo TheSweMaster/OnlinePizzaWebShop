@@ -27,13 +27,13 @@ namespace OnlinePizzaWebApplication.Controllers
             return View();
         }
 
-        public IActionResult ClearDatabaseAsync()
+        public IActionResult ClearDatabase()
         {
             _adminRepo.ClearDatabase();
             return RedirectToAction("Index", "Pizzas", null);
         }
 
-        public IActionResult SeedDatabaseAsync()
+        public IActionResult SeedDatabase()
         {
             _adminRepo.ClearDatabase();
             _adminRepo.SeedDatabase();
