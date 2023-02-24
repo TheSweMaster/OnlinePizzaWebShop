@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using OnlinePizzaWebApplication.Models;
 using Microsoft.EntityFrameworkCore;
 using OnlinePizzaWebApplication.Data;
 using OnlinePizzaWebApplication.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
 
 namespace OnlinePizzaWebApplication
 {
@@ -27,10 +27,12 @@ namespace OnlinePizzaWebApplication
         {
             services.AddDbContext<AppDbContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
+            services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddIdentity<IdentityUser, IdentityRole>()
                     .AddEntityFrameworkStores<AppDbContext>()
                     .AddDefaultTokenProviders();
+            
+            services.AddControllersWithViews();
 
             services.AddTransient<IPizzaRepository, PizzaRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
@@ -40,10 +42,15 @@ namespace OnlinePizzaWebApplication
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped(sp => ShoppingCart.GetCart(sp));
 
-            services.AddMvc();
-
             services.AddMemoryCache();
-            services.AddSession();
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = ".OnlinePizzaWebApplication.Session";
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.IsEssential = true;
+                options.Cookie.HttpOnly = true;
+            });
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -67,6 +74,8 @@ namespace OnlinePizzaWebApplication
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings
+                options.Cookie.Name = ".OnlinePizzaWebApplication";
+                options.Cookie.IsEssential = true;
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
                 // If the LoginPath isn't set, ASP.NET Core defaults 
@@ -82,33 +91,34 @@ namespace OnlinePizzaWebApplication
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
             if (env.IsDevelopment())
             {
-                app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+                app.UseMigrationsEndPoint();
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
             }
 
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
+            
+            app.UseRouting();
             app.UseSession();
+
             app.UseAuthentication();
+            app.UseAuthorization();
 
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
             });
-
         }
     }
 }

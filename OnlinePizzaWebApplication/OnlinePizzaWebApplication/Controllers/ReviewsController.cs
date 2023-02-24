@@ -72,45 +72,25 @@ namespace OnlinePizzaWebApplication.Controllers
 
             if (isDescending == false)
             {
-                switch (sortBy.ToLower())
+                result = sortBy.ToLower() switch
                 {
-                    case "date":
-                        result = reviewsList.OrderBy(x => x.Date);
-                        break;
-                    case "grade":
-                        result = reviewsList.OrderBy(x => x.Grade);
-                        break;
-                    case "title":
-                        result = reviewsList.OrderBy(x => x.Title);
-                        break;
-                    case "pizza name":
-                        result = reviewsList.OrderBy(x => x.Pizza.Name);
-                        break;
-                    default:
-                        result = reviewsList.OrderBy(x => x.Pizza.Id);
-                        break;
-                }
+                    "date" => reviewsList.OrderBy(x => x.Date),
+                    "grade" => reviewsList.OrderBy(x => x.Grade),
+                    "title" => reviewsList.OrderBy(x => x.Title),
+                    "pizza name" => reviewsList.OrderBy(x => x.Pizza.Name),
+                    _ => reviewsList.OrderBy(x => x.Pizza.Id),
+                };
             }
             else
             {
-                switch (sortBy.ToLower())
+                result = sortBy.ToLower() switch
                 {
-                    case "date":
-                        result = reviewsList.OrderByDescending(x => x.Date);
-                        break;
-                    case "grade":
-                        result = reviewsList.OrderByDescending(x => x.Grade);
-                        break;
-                    case "title":
-                        result = reviewsList.OrderByDescending(x => x.Title);
-                        break;
-                    case "pizza name":
-                        result = reviewsList.OrderByDescending(x => x.Pizza.Name);
-                        break;
-                    default:
-                        result = reviewsList.OrderByDescending(x => x.Pizza.Id);
-                        break;
-                }
+                    "date" => reviewsList.OrderByDescending(x => x.Date),
+                    "grade" => reviewsList.OrderByDescending(x => x.Grade),
+                    "title" => reviewsList.OrderByDescending(x => x.Title),
+                    "pizza name" => reviewsList.OrderByDescending(x => x.Pizza.Name),
+                    _ => reviewsList.OrderByDescending(x => x.Pizza.Id),
+                };
             }
 
             //Partial view?
@@ -308,7 +288,7 @@ namespace OnlinePizzaWebApplication.Controllers
                 var userId = _userManager.GetUserId(HttpContext.User);
                 try
                 {
-                    if (reviews.Date == null)
+                    if (reviews.Date == DateTime.MinValue)
                     {
                         reviews.Date = DateTime.Now;
                     }

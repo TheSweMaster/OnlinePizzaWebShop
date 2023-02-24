@@ -9,7 +9,6 @@ using OnlinePizzaWebApplication.Models;
 using OnlinePizzaWebApplication.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using OnlinePizzaWebApplication.ViewModels;
-using Newtonsoft.Json;
 using OnlinePizzaWebApplication.Data;
 
 namespace OnlinePizzaWebApplication.Controllers
@@ -49,14 +48,22 @@ namespace OnlinePizzaWebApplication.Controllers
 
         private async Task<List<Pizzas>> GetPizzaSearchList(string userInput)
         {
-            userInput = userInput.ToLower().Trim();
+            var userInputTrimmed = userInput?.ToLower()?.Trim();
 
-            var result = _context.Pizzas.Include(p => p.Category)
-                .Where(p => p
-                    .Name.ToLower().Contains(userInput))
-                    .Select(p => p).OrderBy(p => p.Name);
-
-            return await result.ToListAsync();
+            if (string.IsNullOrWhiteSpace(userInputTrimmed))
+            {
+                return await _context.Pizzas.Include(p => p.Category)
+                    .Select(p => p).OrderBy(p => p.Name)
+                    .ToListAsync();
+            }
+            else
+            {
+                return await _context.Pizzas.Include(p => p.Category)
+                    .Where(p => p
+                    .Name.ToLower().Contains(userInputTrimmed))
+                    .Select(p => p).OrderBy(p => p.Name)
+                    .ToListAsync();
+            }
         }
 
         [AllowAnonymous]

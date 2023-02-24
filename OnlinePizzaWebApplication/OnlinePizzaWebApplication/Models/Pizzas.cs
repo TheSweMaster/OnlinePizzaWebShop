@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -26,6 +27,7 @@ namespace OnlinePizzaWebApplication.Models
         [Range(0, 1000)]
         [DataType(DataType.Currency)]
         [Required]
+        [Precision(18, 2)]
         public decimal Price { get; set; }
 
         [StringLength(255, MinimumLength = 2)]

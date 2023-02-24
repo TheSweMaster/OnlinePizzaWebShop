@@ -4,5 +4,5 @@
 
 @foreach (var pizza in Model)
 {
-    @Html.Partial("PizzaSummary", pizza)
+    @await Html.PartialAsync("PizzaSummary", pizza)
 }

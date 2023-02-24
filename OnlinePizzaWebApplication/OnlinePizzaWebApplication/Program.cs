@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,6 +33,11 @@ namespace OnlinePizzaWebApplication
         }
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddConsole();
+                })
                 .UseStartup<Startup>()
                 .Build();
 

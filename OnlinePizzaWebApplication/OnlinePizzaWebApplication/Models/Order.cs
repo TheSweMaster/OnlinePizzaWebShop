@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -67,6 +68,7 @@ namespace OnlinePizzaWebApplication.Models
         [BindNever]
         [ScaffoldColumn(false)]
         [DisplayName("Order Total")]
+        [Precision(18, 2)]
         public decimal OrderTotal { get; set; }
 
         [BindNever]
