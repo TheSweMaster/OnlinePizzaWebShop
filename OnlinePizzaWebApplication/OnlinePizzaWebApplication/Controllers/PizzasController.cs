@@ -10,6 +10,7 @@ using OnlinePizzaWebApplication.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using OnlinePizzaWebApplication.ViewModels;
 using OnlinePizzaWebApplication.Data;
+using OnlinePizzaWebShop.ViewModels;
 
 namespace OnlinePizzaWebApplication.Controllers
 {
@@ -31,6 +32,18 @@ namespace OnlinePizzaWebApplication.Controllers
         public async Task<IActionResult> Index()
         {
             return View(await _pizzaRepo.GetAllIncludedAsync());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Search()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Search(SearchViewModel model)
+        {
+            return View();
         }
 
         // GET: Pizzas

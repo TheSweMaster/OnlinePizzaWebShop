@@ -18,6 +18,7 @@ namespace OnlinePizzaWebApplication.ViewModels
         public string Password { get; set; }
 
         [ScaffoldColumn(false)]
+        [Required(AllowEmptyStrings = true)]
         public string ReturnUrl { get; set; }
     }
 }
