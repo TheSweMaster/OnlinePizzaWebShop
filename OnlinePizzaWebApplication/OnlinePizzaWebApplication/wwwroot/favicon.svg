@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Crust base (full slice shape with rounded bottom) -->
+  <path d="M32 4 L58 50 Q32 64 6 50 Z" fill="#C87A1A" stroke="#A86610" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Cheese/sauce layer (smaller, rounded bottom, sits on top of crust) -->
+  <path d="M32 4 L53.5 46 Q32 58 10.5 46 Z" fill="#F4A623" stroke="#D4891A" stroke-width="1.5" stroke-linejoin="round"/>
+  <!-- Pepperoni -->
+  <circle cx="31" cy="20" r="3.5" fill="#C0392B"/>
+  <circle cx="22" cy="37" r="3" fill="#C0392B"/>
+  <circle cx="40" cy="39" r="4" fill="#C0392B"/>
+  <!-- Cheese spots -->
+  <circle cx="38" cy="29" r="2" fill="#F7DC6F" opacity="0.6"/>
+  <circle cx="24" cy="29" r="1.5" fill="#F7DC6F" opacity="0.6"/>
+  <circle cx="32" cy="44" r="1.8" fill="#F7DC6F" opacity="0.6"/>
+</svg>

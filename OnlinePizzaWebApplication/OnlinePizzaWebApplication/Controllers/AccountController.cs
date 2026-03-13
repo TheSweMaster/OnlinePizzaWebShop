@@ -10,7 +10,7 @@ using OnlinePizzaWebApplication.ViewModels;
 
 namespace OnlinePizzaWebApplication.Controllers
 {
-    [AllowAnonymous]
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
@@ -103,6 +103,5 @@ namespace OnlinePizzaWebApplication.Controllers
         {
             return View();
         }
-
     }
 }
