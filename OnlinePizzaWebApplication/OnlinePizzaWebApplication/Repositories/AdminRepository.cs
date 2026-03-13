@@ -5,6 +5,7 @@ using OnlinePizzaWebApplication.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace OnlinePizzaWebApplication.Repositories
 {
@@ -19,7 +20,7 @@ namespace OnlinePizzaWebApplication.Repositories
             _serviceProvider = serviceProvider;
         }
 
-        public void SeedDatabase()
+        public async Task SeedDatabaseAsync()
         {
             var _roleManager = _serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var _userManager = _serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
@@ -64,7 +65,7 @@ namespace OnlinePizzaWebApplication.Repositories
 
             foreach (var user in users)
             {
-                _userManager.CreateAsync(user, userPassword).Wait();
+                await _userManager.CreateAsync(user, userPassword);
             }
 
             var revs = new List<Reviews>()
@@ -203,10 +204,10 @@ namespace OnlinePizzaWebApplication.Repositories
             _context.Ingredients.AddRange(ings);
             _context.PizzaIngredients.AddRange(pizIngs);
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void ClearDatabase()
+        public async Task ClearDatabaseAsync()
         {
             var pizzaIngredients = _context.PizzaIngredients.ToList();
             _context.PizzaIngredients.RemoveRange(pizzaIngredients);
@@ -243,7 +244,7 @@ namespace OnlinePizzaWebApplication.Repositories
             var categories = _context.Categories.ToList();
             _context.Categories.RemoveRange(categories);
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
     }

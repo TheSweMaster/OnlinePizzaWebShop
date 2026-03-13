@@ -1,9 +1,10 @@
-﻿
+﻿using System.Threading.Tasks;
+
 namespace OnlinePizzaWebApplication.Repositories
 {
     public interface IAdminRepository
     {
-        void SeedDatabase();
-        void ClearDatabase();
+        Task SeedDatabaseAsync();
+        Task ClearDatabaseAsync();
     }
 }
