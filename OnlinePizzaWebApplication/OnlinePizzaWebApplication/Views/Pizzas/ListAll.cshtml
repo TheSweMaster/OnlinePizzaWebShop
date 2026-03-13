@@ -12,7 +12,7 @@
         <div class="form-group">
             <label asp-for="SearchText" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="SearchText" class="form-control" type="text" id="SearchFieldId" oninput="listSearchExamplesScript()" />
+                <input asp-for="SearchText" class="form-control" type="text" id="SearchFieldId" oninput="listSearchExamplesScript()" autofocus="autofocus" />
                 <span asp-validation-for="SearchText" class="text-danger"></span>
                 
             </div>
