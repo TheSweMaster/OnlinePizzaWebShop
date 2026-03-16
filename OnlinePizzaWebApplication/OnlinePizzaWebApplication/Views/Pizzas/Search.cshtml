@@ -1,0 +1,31 @@
+﻿@using OnlinePizzaWebShop.ViewModels
+@model SearchViewModel
+@{
+    var pageName = "Search";
+    ViewData["Title"] = pageName;
+}
+@section headContents
+{
+    <link rel="stylesheet" href="/css/search.css"/>
+}
+<div class="row">
+    <div class="col-md-12">
+        @using(Html.BeginForm("Search","Pizzas",FormMethod.Post,new { @class = "container" })){
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>Search Pizza Shop</h2>
+                    <div id="custom-search-input">
+                        <div class="input-group col-md-12">
+                            <input type="text" name="SearchText" id="SearchText" class="form-control input-lg" placeholder="Enter search text" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-info btn-lg" type="submit">
+                                    <i class="glyphicon glyphicon-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -62,8 +62,18 @@ textarea {
         color: #333;
 }
 
+    .thumbnail .addToCart {
+        padding: 9px;
+    }
+
+.imgThumbnail {
+    height: 200px !important;
+    object-fit: cover;
+    width: 100%;
+}
+
 footer {
-    margin: 25px 0;
+    margin-bottom: 5px;
 }
 
 .navbar {
@@ -115,4 +125,11 @@ footer {
 
 .review-stars {
     max-width: 150px;
+}
+.breadcrumb {
+    background: rgba(245, 245, 245, 0);
+    border: 0px solid rgba(245, 245, 245, 1);
+    border-radius: 25px;
+    display: block;
+    margin: 0px;
 }
