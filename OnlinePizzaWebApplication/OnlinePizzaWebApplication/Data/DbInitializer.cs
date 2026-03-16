@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using OnlinePizzaWebApplication.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,7 +10,7 @@ namespace OnlinePizzaWebApplication.Data
 {
     public class DbInitializer
     {
-        public static void Initialize(AppDbContext context, IServiceProvider service)
+        public static async Task InitializeAsync(AppDbContext context, IServiceProvider service)
         {
             context.Database.EnsureCreated();
 
@@ -22,23 +23,23 @@ namespace OnlinePizzaWebApplication.Data
             }
 
             ClearDatabase(context);
-            CreateAdminRole(context, roleManager, userManager);
-            SeedDatabase(context, roleManager, userManager);
+            await CreateAdminRoleAsync(context, roleManager, userManager);
+            await SeedDatabaseAsync(context, roleManager, userManager);
         }
 
-        private static void CreateAdminRole(AppDbContext context, RoleManager<IdentityRole> _roleManager, UserManager<IdentityUser> _userManager)
+        private static async Task CreateAdminRoleAsync(AppDbContext context, RoleManager<IdentityRole> _roleManager, UserManager<IdentityUser> _userManager)
         {
-            bool roleExists = _roleManager.RoleExistsAsync("Admin").Result;
+            bool roleExists = await _roleManager.RoleExistsAsync("Admin");
             if (roleExists)
             {
                 return;
             }
-            
+
             var role = new IdentityRole()
             {
                 Name = "Admin"
             };
-            _roleManager.CreateAsync(role).Wait();
+            await _roleManager.CreateAsync(role);
 
             var user = new IdentityUser()
             {
@@ -47,15 +48,15 @@ namespace OnlinePizzaWebApplication.Data
             };
 
             string adminPassword = "Password123";
-            var userResult =  _userManager.CreateAsync(user, adminPassword).Result;
+            var userResult = await _userManager.CreateAsync(user, adminPassword);
 
             if (userResult.Succeeded)
             {
-                _userManager.AddToRoleAsync(user, "Admin").Wait();
+                await _userManager.AddToRoleAsync(user, "Admin");
             }
         }
 
-        private static void SeedDatabase(AppDbContext _context, RoleManager<IdentityRole> _roleManager, UserManager<IdentityUser> _userManager)
+        private static async Task SeedDatabaseAsync(AppDbContext _context, RoleManager<IdentityRole> _roleManager, UserManager<IdentityUser> _userManager)
         {
             var cat1 = new Categories { Name = "Standard", Description = "The Bakery's Standard pizzas all year around." };
             var cat2 = new Categories { Name = "Spcialities", Description = "The Bakery's Speciality pizzas only for a limited time." };
@@ -97,7 +98,7 @@ namespace OnlinePizzaWebApplication.Data
 
             foreach (var user in users)
             {
-                _userManager.CreateAsync(user, userPassword).Wait();
+                await _userManager.CreateAsync(user, userPassword);
             }
 
             var revs = new List<Reviews>()
